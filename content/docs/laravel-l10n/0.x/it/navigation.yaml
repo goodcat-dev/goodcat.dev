@@ -1,0 +1,13 @@
+'per iniziare':
+  introduction: 'Introduzione'
+  quickstart: 'Guida rapida'
+routing:
+  localized-routes: 'Route localizzate'
+  url-generation: 'Generazione degli URL'
+'funzionalità':
+  locale-preference: 'Lingua preferita'
+  helpers: 'Helper'
+  components: 'Componenti Blade'
+  localized-views: 'View localizzate'
+frontend:
+  javascript: 'Generazione degli URL in JavaScript'

@@ -1,6 +1,6 @@
 @props(['package', 'version', 'current', 'navigation', 'toc' => []])
 
-<nav aria-label="Documentation" {{ $attributes->class('flex flex-col gap-7 text-[15px]') }}>
+<nav aria-label="{{ __('Documentation') }}" {{ $attributes->class('flex flex-col gap-7 text-[15px]') }}>
     @foreach ($navigation as $section => $pages)
         <div>
             <h2 class="mb-2 ml-3 font-mono text-xs font-normal text-mist">// {{ $section }}</h2>

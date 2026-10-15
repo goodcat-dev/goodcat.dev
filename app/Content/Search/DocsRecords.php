@@ -60,7 +60,7 @@ class DocsRecords
             $sections[array_key_last($sections)]['content'] .= ' '.$this->text($node);
         }
 
-        $path = route('docs.show', [$package, $version, $page->slug], absolute: false);
+        $path = route('docs.show', [$package, $version, $page->slug, 'lang' => $locale], absolute: false);
 
         return collect($sections)->map(fn (array $section, int $position) => [
             'objectID' => "docs:{$package}:{$version}:{$locale}:{$page->slug}#".($section['anchor'] ?? ''),

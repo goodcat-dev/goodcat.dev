@@ -2,7 +2,7 @@
     $isIntroduction = $page->slug === 'introduction';
     $guides = $page->frontMatter['guides'] ?? [];
     $features = $page->frontMatter['features'] ?? [];
-    $toc = $page->sections + array_filter(['guides' => $guides ? 'Guides' : null, 'features' => $features ? 'Features' : null]);
+    $toc = $page->sections + array_filter(['guides' => $guides ? __('Guides') : null, 'features' => $features ? __('Features') : null]);
     $pageUrl = fn (string $slug) => route('docs.show', [$package['slug'], $version, $slug]);
     $arrow = '<svg class="size-[18px]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 10h10M11 6l4 4-4 4" /></svg>';
     $featureStyles = [
@@ -21,8 +21,8 @@
                 <p class="mt-[22px] max-w-[640px] text-[21px] leading-normal">{{ $page->description }}</p>
             @endif
             <div class="mt-8 flex flex-wrap gap-3">
-                <a href="{{ $pageUrl('quickstart') }}" class="inline-flex h-[50px] items-center gap-2.5 rounded-full bg-ink px-6 text-[17px] font-bold text-chalk">Quickstart {!! $arrow !!}</a>
-                <a href="{{ $package['repository'] }}" class="inline-flex h-[50px] items-center rounded-full px-6 text-[17px] font-bold text-pkg-ink shadow-[inset_0_0_0_2px_var(--pkg-ink)] hover:text-pkg-ink">View on GitHub</a>
+                <a href="{{ $pageUrl('quickstart') }}" class="inline-flex h-[50px] items-center gap-2.5 rounded-full bg-ink px-6 text-[17px] font-bold text-chalk">{{ $titles['quickstart'] ?? 'Quickstart' }} {!! $arrow !!}</a>
+                <a href="{{ $package['repository'] }}" class="inline-flex h-[50px] items-center rounded-full px-6 text-[17px] font-bold text-pkg-ink shadow-[inset_0_0_0_2px_var(--pkg-ink)] hover:text-pkg-ink">{{ __('View on GitHub') }}</a>
             </div>
         </section>
     @else
@@ -42,25 +42,25 @@
     </div>
 
     @if ($isIntroduction)
-        <a href="{{ $pageUrl('quickstart') }}" class="mt-5 inline-flex min-h-11 items-center gap-2 text-[17px] font-bold text-pkg-text hover:text-acid">Get started with the Quickstart {!! $arrow !!}</a>
+        <a href="{{ $pageUrl('quickstart') }}" class="mt-5 inline-flex min-h-11 items-center gap-2 text-[17px] font-bold text-pkg-text hover:text-acid">{{ __('Get started with the Quickstart') }} {!! $arrow !!}</a>
     @endif
 
     @if ($guides)
-        <h2 id="guides" class="mt-18 scroll-mt-24 text-[32px] font-extrabold tracking-[-0.035em] md:text-[40px]">Guides</h2>
+        <h2 id="guides" class="mt-18 scroll-mt-24 text-[32px] font-extrabold tracking-[-0.035em] md:text-[40px]">{{ __('Guides') }}</h2>
         <div class="mt-6 grid gap-3.5 sm:grid-cols-2">
             @foreach ($guides as $guide)
                 <a href="{{ $pageUrl($guide['page']) }}" class="flex flex-col gap-2.5 rounded-[32px] bg-ink-2 p-7 transition-transform duration-250 squircle hover:-translate-y-[3px] hover:text-chalk">
                     <span class="font-mono text-xs text-pkg-text">{{ sprintf('%02d', $loop->iteration) }}</span>
                     <span class="text-[22px] font-extrabold tracking-[-0.02em]">{{ $guide['title'] ?? $titles[$guide['page']] ?? $guide['page'] }}</span>
                     <span class="text-base leading-[1.55] text-mist">{{ $guide['description'] }}</span>
-                    <span class="mt-auto pt-2 font-bold text-pkg-text">Read more →</span>
+                    <span class="mt-auto pt-2 font-bold text-pkg-text">{{ __('Read more') }} →</span>
                 </a>
             @endforeach
         </div>
     @endif
 
     @if ($features)
-        <h2 id="features" class="mt-18 scroll-mt-24 text-[32px] font-extrabold tracking-[-0.035em] md:text-[40px]">Features</h2>
+        <h2 id="features" class="mt-18 scroll-mt-24 text-[32px] font-extrabold tracking-[-0.035em] md:text-[40px]">{{ __('Features') }}</h2>
         <div class="mt-6 flex flex-wrap gap-3.5">
             @foreach ($features as $feature)
                 @php($style = $featureStyles[$loop->index % count($featureStyles)])
@@ -75,22 +75,22 @@
 
     <div x-data="feedback" class="mt-18 flex min-h-11 flex-wrap items-center gap-4">
         <div x-show="! voted" class="flex flex-wrap items-center gap-4">
-            <span class="text-base text-fog">Was this page helpful?</span>
+            <span class="text-base text-fog">{{ __('Was this page helpful?') }}</span>
             <span class="flex gap-2">
-                <button type="button" x-on:click="vote" class="h-11 cursor-pointer rounded-full bg-ink-3 px-5 font-bold hover:text-acid">Yes</button>
-                <button type="button" x-on:click="vote" class="h-11 cursor-pointer rounded-full bg-ink-3 px-5 font-bold hover:text-acid">No</button>
+                <button type="button" x-on:click="vote" class="h-11 cursor-pointer rounded-full bg-ink-3 px-5 font-bold hover:text-acid">{{ __('Yes') }}</button>
+                <button type="button" x-on:click="vote" class="h-11 cursor-pointer rounded-full bg-ink-3 px-5 font-bold hover:text-acid">{{ __('No') }}</button>
             </span>
         </div>
         <span x-show="voted" x-cloak class="inline-flex items-center gap-2.5 text-base text-fog" role="status">
             <x-site.cat-mark :stroke-width="5" class="size-6 text-pkg-text" />
-            Thanks for your feedback!
+            {{ __('Thanks for your feedback!') }}
         </span>
     </div>
 
     @if ($next)
         <a href="{{ $pageUrl($next) }}" class="mt-7 flex items-center justify-between gap-4 rounded-[32px] bg-ink-2 px-8 py-[26px] transition-transform duration-250 squircle hover:-translate-y-[3px] hover:text-chalk">
             <span>
-                <span class="block font-mono text-xs text-mist">next</span>
+                <span class="block font-mono text-xs text-mist">{{ __('next') }}</span>
                 <span class="mt-1 block text-[26px] font-extrabold tracking-[-0.03em]">{{ $titles[$next] }}</span>
             </span>
             <x-site.blob class="size-13 text-pkg-ink" shape="fill-pkg">

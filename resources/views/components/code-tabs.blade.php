@@ -3,7 +3,7 @@
 <div data-code x-data="copyCode" {{ $attributes->class('mt-7 overflow-hidden rounded-[28px] bg-ink-2 shadow-[inset_0_0_0_1px_var(--color-line)] squircle') }}>
     <div x-data="tabs(0)">
         <div class="flex items-center gap-1 border-b border-line pt-2.5 pr-1 pl-3.5">
-            <div role="tablist" aria-label="Code example" class="flex min-w-0 flex-wrap gap-1">
+            <div role="tablist" aria-label="{{ __('Code example') }}" class="flex min-w-0 flex-wrap gap-1">
                 @foreach ($files as $file)
                     <button
                         type="button"

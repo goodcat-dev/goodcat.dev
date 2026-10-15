@@ -16,18 +16,26 @@ class ContentCompiler
     /**
      * @return array{front_matter: array<string, mixed>, html: string, sections: array<string, string>}
      */
-    public function get(string $path): array
+    public function get(string $path, string $locale): array
     {
         if ($this->isExpired($path)) {
-            $this->compile($path);
+            $this->compile($path, $locale);
         }
 
         return $this->files->getRequire($this->compiledPath($path));
     }
 
-    public function compile(string $path): void
+    public function compile(string $path, string $locale): void
     {
-        $compiled = $this->renderer->render($this->files->get($path));
+        $translator = app('translator');
+        $previous = $translator->getLocale();
+        $translator->setLocale($locale);
+
+        try {
+            $compiled = $this->renderer->render($this->files->get($path));
+        } finally {
+            $translator->setLocale($previous);
+        }
 
         $this->files->ensureDirectoryExists($this->cachePath);
         $this->files->replace($this->compiledPath($path), '<?php return '.var_export($compiled, true).';'.PHP_EOL);

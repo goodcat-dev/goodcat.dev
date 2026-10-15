@@ -25,6 +25,6 @@
                 >{{ $item['label'] }}</a>
             @endforeach
         </nav>
-        <x-locale.switcher align="responsive" />
+        <x-l10n::switcher align="responsive" />
     </div>
 </header>

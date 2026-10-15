@@ -36,6 +36,11 @@ class SearchIndexTest extends TestCase
         $this->assertStringNotContainsString('vendor:publish --tag=l10n-config', $record['content']);
         $this->assertSame('Custom binding keys', $records->firstWhere('objectID', 'docs:laravel-l10n:0.x:en:localized-routes#custom-binding-keys')['hierarchy']['lvl3']);
         $this->assertTrue($records->every(fn (array $record) => strlen(json_encode($record)) < 10_000));
+
+        $italian = $records->firstWhere('objectID', 'docs:laravel-l10n:0.x:it:localized-routes#strategia-di-routing');
+
+        $this->assertSame('/it/docs/laravel-l10n/0.x/localized-routes#strategia-di-routing', $italian['url']);
+        $this->assertSame(['lvl0' => 'routing', 'lvl1' => 'Route localizzate', 'lvl2' => 'Strategia di routing', 'lvl3' => null], $italian['hierarchy']);
     }
 
     public function test_search_index_rebuilds_a_temporary_index_and_moves_it(): void

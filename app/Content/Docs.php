@@ -15,13 +15,13 @@ class Docs
 
     public function find(string $package, string $version, string $page, string $locale = 'en'): ?DocsPage
     {
-        $path = $this->directory($package, $version, $locale)."/{$page}.md";
+        $path = $this->path($package, $version, $page, $locale);
 
         if (! $this->files->exists($path)) {
             return null;
         }
 
-        $compiled = $this->compiler->get($path);
+        $compiled = $this->compiler->get($path, $locale);
 
         return new DocsPage(
             slug: $page,
@@ -46,15 +46,7 @@ class Docs
             return null;
         }
 
-        $locales = array_unique([app()->getLocale(), config('app.fallback_locale')]);
-
-        foreach ($locales as $locale) {
-            if ($this->exists($package, $version, $locale)) {
-                return route('docs.index', [$package, 'lang' => $locale]);
-            }
-        }
-
-        return null;
+        return $this->exists($package, $version, app()->getLocale()) ? route('docs.index', $package) : null;
     }
 
     /**
@@ -99,6 +91,11 @@ class Docs
             ->map(fn ($file) => $file->getPathname())
             ->values()
             ->all();
+    }
+
+    public function path(string $package, string $version, string $page, string $locale): string
+    {
+        return $this->directory($package, $version, $locale)."/{$page}.md";
     }
 
     private function directory(string $package, string $version, string $locale): string

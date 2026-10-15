@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Content\Docs;
-use App\Support\Translations;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
@@ -19,7 +18,7 @@ class DocsController extends Controller
         return redirect()->route('docs.show', [$package, $version, 'introduction']);
     }
 
-    public function show(Docs $docs, Translations $translations, string $package, string $version, string $page): View
+    public function show(Docs $docs, string $package, string $version, string $page): View
     {
         abort_unless(config()->has("packages.{$package}"), 404);
 
@@ -27,12 +26,6 @@ class DocsController extends Controller
         $docsPage = $docs->find($package, $version, $page, $locale);
 
         abort_if($docsPage === null, 404);
-
-        foreach (array_keys(config('app.locales')) as $other) {
-            if ($other !== $locale && $docs->find($package, $version, $page, $other) === null) {
-                $translations->missing($other);
-            }
-        }
 
         $navigation = $docs->navigation($package, $version, $locale);
         $titles = Arr::collapse($navigation);

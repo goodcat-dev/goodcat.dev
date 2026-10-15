@@ -16,8 +16,8 @@ class ContentCache extends Command
     {
         $compiler->clear();
 
-        foreach ($docs->paths() as $path) {
-            $compiler->compile($path);
+        foreach ($docs->all() as $entry) {
+            $compiler->compile($docs->path($entry['package'], $entry['version'], $entry['page'], $entry['locale']), $entry['locale']);
         }
 
         $this->components->info('Content cached successfully.');

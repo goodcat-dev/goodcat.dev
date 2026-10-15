@@ -1,0 +1,13 @@
+'getting started':
+  introduction: 'Introduction'
+  quickstart: 'Quickstart'
+routing:
+  localized-routes: 'Localized Routes'
+  url-generation: 'URL Generation'
+features:
+  locale-preference: 'Locale Preference'
+  helpers: 'Helpers'
+  components: 'Blade Components'
+  localized-views: 'Localized Views'
+frontend:
+  javascript: 'JavaScript URL Generation'

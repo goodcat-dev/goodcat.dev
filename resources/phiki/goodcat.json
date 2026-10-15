@@ -1,0 +1,42 @@
+{
+    "name": "goodcat",
+    "type": "dark",
+    "colors": {
+        "editor.background": "#00000000",
+        "editor.foreground": "#e4e4e7"
+    },
+    "tokenColors": [
+        {
+            "scope": ["comment", "punctuation.definition.comment"],
+            "settings": { "foreground": "#6b6b76" }
+        },
+        {
+            "scope": ["keyword", "storage", "storage.type", "storage.modifier", "constant.language", "variable.language", "support.type.primitive"],
+            "settings": { "foreground": "#ff8ad8" }
+        },
+        {
+            "scope": ["keyword.operator", "punctuation"],
+            "settings": { "foreground": "#c4c4cc" }
+        },
+        {
+            "scope": ["string", "punctuation.definition.string", "string.template", "string.unquoted"],
+            "settings": { "foreground": "#dbff75" }
+        },
+        {
+            "scope": ["entity.name.function", "support.function", "meta.function-call", "entity.name.command", "support.function.builtin"],
+            "settings": { "foreground": "#7ee7f2" }
+        },
+        {
+            "scope": ["variable.other.php", "variable.parameter", "punctuation.definition.variable", "constant.numeric", "entity.other.attribute-name", "variable.other.env", "constant.other.option"],
+            "settings": { "foreground": "#ffb38a" }
+        },
+        {
+            "scope": ["entity.name.type", "entity.name.class", "entity.name.namespace", "support.class", "support.type", "entity.other.inherited-class", "entity.name.tag", "support.other.namespace", "punctuation.definition.tag"],
+            "settings": { "foreground": "#ffd166" }
+        },
+        {
+            "scope": ["keyword.blade", "punctuation.section.embedded", "support.function.construct.output"],
+            "settings": { "foreground": "#ff8ad8" }
+        }
+    ]
+}

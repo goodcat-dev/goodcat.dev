@@ -3,7 +3,7 @@
 <x-package-scope
     as="a"
     :package="$package"
-    href="{{ $package['repository'] }}"
+    href="{{ $package['url'] }}"
     :class="Arr::toCssClasses([
         'flex flex-col justify-between gap-6 rounded-[48px] p-7 text-pkg-ink transition-transform duration-250 squircle hover:-translate-y-1 hover:-rotate-[0.4deg] md:p-9',
         'min-h-[360px] flex-[2_1_560px] bg-[radial-gradient(circle_at_0_100%,var(--pkg-main)_50%,var(--pkg-light)_130%)]' => $package['featured'],

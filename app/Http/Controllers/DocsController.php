@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Support\SampleDocs;
+use App\Content\Docs;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Illuminate\View\View;
 
 class DocsController extends Controller
@@ -17,17 +18,27 @@ class DocsController extends Controller
         return redirect()->route('docs.show', [$package, $version, 'introduction']);
     }
 
-    public function show(string $package, string $version, string $page): View
+    public function show(Docs $docs, string $package, string $version, string $page): View
     {
-        $view = SampleDocs::view($package, $version, $page);
+        abort_unless(config()->has("packages.{$package}"), 404);
 
-        abort_unless(config()->has("packages.{$package}") && view()->exists($view), 404);
+        $docsPage = $docs->find($package, $version, $page);
 
-        return view($view, [
+        abort_if($docsPage === null, 404);
+
+        $navigation = $docs->navigation($package, $version);
+        $titles = Arr::collapse($navigation);
+        $slugs = array_keys($titles);
+        $position = array_search($page, $slugs, true);
+
+        return view('docs.show', [
             'package' => [...config("packages.{$package}"), 'slug' => $package],
             'version' => $version,
-            'page' => $page,
-            'navigation' => SampleDocs::navigation($package, $version),
+            'page' => $docsPage,
+            'navigation' => $navigation,
+            'titles' => $titles,
+            'section' => collect($navigation)->search(fn (array $pages) => array_key_exists($page, $pages)) ?: null,
+            'next' => $position !== false ? ($slugs[$position + 1] ?? null) : null,
         ]);
     }
 }

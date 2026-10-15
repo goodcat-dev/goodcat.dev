@@ -1,11 +1,11 @@
-@props(['package', 'version', 'page', 'navigation', 'toc' => [], 'title' => null])
+@props(['package', 'version', 'current', 'navigation', 'toc' => [], 'title' => null])
 
 @php
     $pageTitle = $title ? "{$title} · {$package['name']}" : $package['name'];
 @endphp
 
 <x-layouts.base :title="$pageTitle">
-    <x-package-scope :package="$package" class="min-h-screen [&_.c]:text-slate [&_.f]:text-cyan [&_.k]:text-pink [&_.p]:text-peach [&_.s]:text-acid [&_.t]:text-sun">
+    <x-package-scope :package="$package" class="min-h-screen">
         <header class="border-b border-ink-4">
             <div class="mx-auto flex max-w-[1360px] flex-wrap items-center gap-5 px-5 py-3.5 md:px-6">
                 <a href="{{ route('docs.index', $package['slug']) }}" aria-label="{{ $package['name'] }} documentation home" class="flex items-center gap-3 text-xl font-extrabold tracking-[-0.03em] hover:text-acid">
@@ -44,7 +44,7 @@
                         <div>
                             <h2 class="mb-2 ml-3 font-mono text-xs font-normal text-mist">// {{ $section }}</h2>
                             @foreach ($pages as $slug => $label)
-                                @if ($slug === $page)
+                                @if ($slug === $current)
                                     <a href="{{ route('docs.show', [$package['slug'], $version, $slug]) }}" aria-current="page" class="block rounded-[14px] bg-pkg px-3 py-2.5 font-bold text-pkg-ink squircle hover:text-pkg-ink">{{ $label }}</a>
                                     @if ($toc)
                                         <div class="my-1.5 ml-[18px] flex flex-col border-l-2 border-line pl-3.5">
@@ -62,7 +62,7 @@
                 </nav>
             </aside>
 
-            <main class="min-w-0 max-w-[900px] flex-1 pt-10 pb-16 [&_:not(pre)>code]:rounded-lg [&_:not(pre)>code]:bg-ink-4 [&_:not(pre)>code]:px-[7px] [&_:not(pre)>code]:py-0.5 [&_:not(pre)>code]:font-mono [&_:not(pre)>code]:text-[.86em] [&_:not(pre)>code]:text-chalk [&>h2]:mt-18 [&>h2]:scroll-mt-6 [&>h2]:text-[40px] [&>h2]:font-extrabold [&>h2]:tracking-[-0.035em] [&>p]:mt-4 [&>p]:text-lg [&>p]:leading-[1.7] [&>p]:text-fog [&_strong]:font-bold [&_strong]:text-white">
+            <main class="min-w-0 max-w-[900px] flex-1 pt-10 pb-16">
                 {{ $slot }}
 
                 <footer class="mt-12 flex flex-wrap justify-between gap-4 border-t border-ink-4 pt-6 text-sm text-mist">

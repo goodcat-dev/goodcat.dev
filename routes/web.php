@@ -9,7 +9,9 @@ Route::get('/', HomeController::class)->name('home');
 
 Route::get('/blog/{slug}', [PostController::class, 'show'])->name('posts.show');
 
-Route::get('/docs/{package}', [DocsController::class, 'index'])->name('docs.index');
+Route::get('/docs/{package}', [DocsController::class, 'index'])
+    ->where('package', '[a-z0-9-]+')
+    ->name('docs.index');
 Route::get('/docs/{package}/{version}/{page}', [DocsController::class, 'show'])
-    ->where('version', '\d+\.x')
+    ->where(['package' => '[a-z0-9-]+', 'version' => '\d+\.x', 'page' => '[a-z0-9-]+'])
     ->name('docs.show');

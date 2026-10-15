@@ -12,6 +12,8 @@ class SitePagesTest extends TestCase
             ->assertOk()
             ->assertSee('laravel-l10n')
             ->assertSee('composer require goodcat/laravel-l10n')
+            ->assertSee('href="'.route('docs.index', 'laravel-l10n').'"', false)
+            ->assertSee('href="https://github.com/goodcat-dev/laravel-filter-querystring"', false)
             ->assertSee('Translated URLs without a second router')
             ->assertSee(route('posts.show', 'localized-routes-in-vue'));
     }
@@ -37,13 +39,35 @@ class SitePagesTest extends TestCase
             ->assertRedirect(route('docs.show', ['laravel-l10n', '1.x', 'introduction']));
     }
 
-    public function test_docs_page_renders_navigation_and_content(): void
+    public function test_docs_introduction_renders_hero_guides_and_features(): void
     {
         $this->get('/docs/laravel-l10n/1.x/introduction')
             ->assertOk()
-            ->assertSee('At a glance')
-            ->assertSee('JavaScript URL Generation')
+            ->assertSee('composer require goodcat/laravel-l10n')
+            ->assertSee('<h2 id="at-a-glance">', false)
+            ->assertSee('role="tablist"', false)
+            ->assertSee('Read the user’s preferred locales')
+            ->assertSee(route('docs.show', ['laravel-l10n', '1.x', 'quickstart']))
             ->assertSee('--pkg-main: var(--color-mint)', false);
+    }
+
+    public function test_every_page_in_the_navigation_renders(): void
+    {
+        foreach (['quickstart', 'localized-routes', 'url-generation', 'locale-preference', 'helpers', 'components', 'localized-views', 'javascript'] as $page) {
+            $this->get("/docs/laravel-l10n/1.x/{$page}")->assertOk()->assertSee('class="phiki', false);
+        }
+    }
+
+    public function test_docs_page_renders_alerts_tables_and_section_links(): void
+    {
+        $this->get('/docs/laravel-l10n/1.x/localized-routes')
+            ->assertOk()
+            ->assertSeeInOrder(['// routing', 'Localized Routes'])
+            ->assertSee('// warning')
+            ->assertSee('class="table-wrap"', false)
+            ->assertSee('href="#route-strategy"', false)
+            ->assertSee('<h2 id="route-strategy">', false)
+            ->assertSee(route('docs.show', ['laravel-l10n', '1.x', 'url-generation']));
     }
 
     public function test_unknown_docs_return_not_found(): void

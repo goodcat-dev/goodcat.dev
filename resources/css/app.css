@@ -71,3 +71,75 @@
         display: none !important;
     }
 }
+
+@layer components {
+    .markdown {
+        & > :first-child {
+            @apply mt-0;
+        }
+
+        & > h2 {
+            @apply mt-18 scroll-mt-6 text-[32px] leading-tight font-extrabold tracking-[-0.035em] md:text-[40px];
+        }
+
+        & > h3 {
+            @apply mt-12 scroll-mt-6 text-2xl font-extrabold tracking-[-0.02em];
+        }
+
+        & > h2 + h3 {
+            @apply mt-8;
+        }
+
+        & p {
+            @apply mt-4 text-lg leading-[1.7] text-fog;
+        }
+
+        & :where(p, li, td) a {
+            @apply font-bold text-pkg-text hover:text-acid;
+        }
+
+        & strong {
+            @apply font-bold text-white;
+        }
+
+        & :not(pre) > code {
+            @apply rounded-lg bg-ink-4 px-[7px] py-0.5 font-mono text-[.86em] text-chalk;
+        }
+
+        & > ul {
+            @apply mt-4 flex flex-col gap-2.5 text-lg leading-[1.6] text-fog;
+
+            & > li {
+                @apply relative pl-6 before:absolute before:top-[0.6em] before:left-0 before:size-2.5 before:rounded before:bg-pkg;
+            }
+        }
+
+        & > ol {
+            @apply mt-4 flex list-decimal flex-col gap-2.5 pl-6 text-lg leading-[1.6] text-fog marker:font-mono marker:text-sm marker:text-pkg-text;
+
+            & > li {
+                @apply pl-2;
+            }
+        }
+
+        & > .table-wrap {
+            @apply mt-6 overflow-x-auto rounded-[24px] shadow-[inset_0_0_0_1px_var(--color-line)] squircle;
+        }
+
+        & table {
+            @apply w-full border-collapse text-left text-[15px];
+        }
+
+        & th {
+            @apply border-b border-line px-5 py-3.5 font-mono text-xs font-normal whitespace-nowrap text-mist;
+        }
+
+        & td {
+            @apply border-b border-line px-5 py-3.5 text-fog;
+        }
+
+        & tr:last-child > td {
+            @apply border-b-0;
+        }
+    }
+}

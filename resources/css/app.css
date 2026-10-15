@@ -3,7 +3,71 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+@theme static {
+    --font-sans: var(--font-bricolage-grotesque), ui-sans-serif, system-ui, sans-serif;
+    --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+    --color-white: #ffffff;
+    --color-ink: #0e0e11;
+    --color-ink-2: #16161b;
+    --color-ink-3: #1b1b20;
+    --color-ink-4: #1f1f26;
+    --color-line: #26262d;
+    --color-mist: #9b9ba6;
+    --color-fog: #c4c4cc;
+    --color-chalk: #f4f4f5;
+    --color-acid: #dbff75;
+    --color-grape: #6d4aff;
+    --color-grape-text: #b3a1ff;
+    --color-mint: #36b49f;
+    --color-mint-ink: #0b2a24;
+    --color-mint-text: #6fe0c9;
+    --color-tangerine: #ff6b2c;
+    --color-tangerine-ink: #2b1006;
+    --color-cobalt: #2f7bff;
+    --color-cyan: #7ee7f2;
+    --color-pink: #ff8ad8;
+    --color-peach: #ffb38a;
+    --color-sun: #ffd166;
+    --color-slate: #6b6b76;
+}
+
+@theme inline {
+    --color-pkg: var(--pkg-main);
+    --color-pkg-light: var(--pkg-light);
+    --color-pkg-ink: var(--pkg-ink);
+    --color-pkg-text: var(--pkg-text);
+}
+
+@utility squircle {
+    corner-shape: squircle;
+}
+
+@layer base {
+    :root {
+        --pkg-main: var(--color-mint);
+        --pkg-light: var(--color-acid);
+        --pkg-ink: var(--color-mint-ink);
+        --pkg-text: var(--color-mint-text);
+    }
+
+    html {
+        @apply bg-ink;
+    }
+
+    body {
+        @apply bg-ink font-sans text-chalk antialiased;
+    }
+
+    ::selection {
+        @apply bg-acid text-ink;
+    }
+
+    :focus-visible {
+        @apply outline-2 outline-offset-2 outline-acid;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
 }

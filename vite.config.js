@@ -9,8 +9,15 @@ export default defineConfig({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
             fonts: [
-                bunny('Instrument Sans', {
-                    weights: [400, 500, 600],
+                bunny('Bricolage Grotesque', {
+                    alias: 'grotesk',
+                    variable: '--font-bricolage-grotesque',
+                    weights: [400, 500, 700, 800],
+                }),
+                bunny('JetBrains Mono', {
+                    alias: 'mono',
+                    variable: '--font-jetbrains-mono',
+                    weights: [400, 500],
                 }),
             ],
         }),

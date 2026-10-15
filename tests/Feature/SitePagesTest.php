@@ -36,45 +36,45 @@ class SitePagesTest extends TestCase
     public function test_package_docs_redirect_to_the_current_version(): void
     {
         $this->get('/docs/laravel-l10n')
-            ->assertRedirect(route('docs.show', ['laravel-l10n', '1.x', 'introduction']));
+            ->assertRedirect(route('docs.show', ['laravel-l10n', '0.x', 'introduction']));
     }
 
     public function test_docs_introduction_renders_hero_guides_and_features(): void
     {
-        $this->get('/docs/laravel-l10n/1.x/introduction')
+        $this->get('/docs/laravel-l10n/0.x/introduction')
             ->assertOk()
             ->assertSee('composer require goodcat/laravel-l10n')
             ->assertSee('<h2 id="at-a-glance">', false)
             ->assertSee('role="tablist"', false)
             ->assertSee('Read the user’s preferred locales')
-            ->assertSee(route('docs.show', ['laravel-l10n', '1.x', 'quickstart']))
+            ->assertSee(route('docs.show', ['laravel-l10n', '0.x', 'quickstart']))
             ->assertSee('--pkg-main: var(--color-mint)', false);
     }
 
     public function test_every_page_in_the_navigation_renders(): void
     {
         foreach (['quickstart', 'localized-routes', 'url-generation', 'locale-preference', 'helpers', 'components', 'localized-views', 'javascript'] as $page) {
-            $this->get("/docs/laravel-l10n/1.x/{$page}")->assertOk()->assertSee('class="phiki', false);
+            $this->get("/docs/laravel-l10n/0.x/{$page}")->assertOk()->assertSee('class="phiki', false);
         }
     }
 
     public function test_docs_page_renders_alerts_tables_and_section_links(): void
     {
-        $this->get('/docs/laravel-l10n/1.x/localized-routes')
+        $this->get('/docs/laravel-l10n/0.x/localized-routes')
             ->assertOk()
             ->assertSeeInOrder(['// routing', 'Localized Routes'])
             ->assertSee('// warning')
             ->assertSee('class="table-wrap"', false)
             ->assertSee('href="#route-strategy"', false)
             ->assertSee('<h2 id="route-strategy">', false)
-            ->assertSee(route('docs.show', ['laravel-l10n', '1.x', 'url-generation']));
+            ->assertSee(route('docs.show', ['laravel-l10n', '0.x', 'url-generation']));
     }
 
     public function test_unknown_docs_return_not_found(): void
     {
         $this->get('/docs/missing-package')->assertNotFound();
-        $this->get('/docs/missing-package/1.x/introduction')->assertNotFound();
-        $this->get('/docs/laravel-l10n/1.x/missing-page')->assertNotFound();
+        $this->get('/docs/missing-package/0.x/introduction')->assertNotFound();
+        $this->get('/docs/laravel-l10n/0.x/missing-page')->assertNotFound();
         $this->get('/docs/laravel-l10n/2.x/introduction')->assertNotFound();
     }
 }

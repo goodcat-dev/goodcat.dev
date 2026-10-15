@@ -13,9 +13,7 @@ class HomeController extends Controller
         return view('home', [
             'packages' => collect(config('packages'))->map(fn (array $package, string $slug) => [
                 ...$package,
-                'url' => $docs->exists($slug, $package['current_version'])
-                    ? route('docs.index', $slug)
-                    : $package['repository'],
+                'url' => $docs->url($slug) ?? $package['repository'],
             ]),
             'posts' => SamplePosts::all()->take(4),
         ]);

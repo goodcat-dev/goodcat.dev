@@ -28,13 +28,13 @@ class SearchIndexTest extends TestCase
     {
         $records = collect(app(DocsRecords::class)->all());
 
-        $record = $records->firstWhere('objectID', 'docs:laravel-l10n:1.x:en:localized-routes#route-strategy');
+        $record = $records->firstWhere('objectID', 'docs:laravel-l10n:0.x:en:localized-routes#route-strategy');
 
-        $this->assertSame('/docs/laravel-l10n/1.x/localized-routes#route-strategy', $record['url']);
+        $this->assertSame('/docs/laravel-l10n/0.x/localized-routes#route-strategy', $record['url']);
         $this->assertSame(['lvl0' => 'routing', 'lvl1' => 'Localized Routes', 'lvl2' => 'Route strategy', 'lvl3' => null], $record['hierarchy']);
         $this->assertStringContainsString('prefix_except_default', $record['content']);
         $this->assertStringNotContainsString('vendor:publish --tag=l10n-config', $record['content']);
-        $this->assertSame('Custom binding keys', $records->firstWhere('objectID', 'docs:laravel-l10n:1.x:en:localized-routes#custom-binding-keys')['hierarchy']['lvl3']);
+        $this->assertSame('Custom binding keys', $records->firstWhere('objectID', 'docs:laravel-l10n:0.x:en:localized-routes#custom-binding-keys')['hierarchy']['lvl3']);
         $this->assertTrue($records->every(fn (array $record) => strlen(json_encode($record)) < 10_000));
     }
 
@@ -50,7 +50,7 @@ class SearchIndexTest extends TestCase
         Http::assertSent(fn (Request $request) => $request->method() === 'POST'
             && str_ends_with($request->url(), '/1/indexes/goodcat_content_tmp/batch')
             && $request->hasHeader('X-Algolia-API-Key', 'admin-key')
-            && collect($request['requests'])->contains('body.objectID', 'docs:laravel-l10n:1.x:en:quickstart#installation'));
+            && collect($request['requests'])->contains('body.objectID', 'docs:laravel-l10n:0.x:en:quickstart#installation'));
 
         Http::assertSent(fn (Request $request) => str_ends_with($request->url(), '/1/indexes/goodcat_content_tmp/operation')
             && $request['operation'] === 'move'
@@ -69,7 +69,7 @@ class SearchIndexTest extends TestCase
 
     public function test_docs_header_exposes_only_the_search_key(): void
     {
-        $this->get('/docs/laravel-l10n/1.x/quickstart')
+        $this->get('/docs/laravel-l10n/0.x/quickstart')
             ->assertSee('Search the docs')
             ->assertSee('search-key')
             ->assertDontSee('admin-key');
@@ -79,7 +79,7 @@ class SearchIndexTest extends TestCase
     {
         config(['services.algolia.search_key' => null]);
 
-        $this->get('/docs/laravel-l10n/1.x/quickstart')
+        $this->get('/docs/laravel-l10n/0.x/quickstart')
             ->assertOk()
             ->assertSee('Search the docs')
             ->assertSee('\u0022enabled\u0022:false', false);

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Content\Docs;
 use App\Support\SamplePosts;
 use Illuminate\View\View;
 
 class PostController extends Controller
 {
-    public function show(string $slug): View
+    public function show(Docs $docs, string $slug): View
     {
         $posts = SamplePosts::all()->values();
         $index = $posts->search(fn (array $post) => $post['slug'] === $slug);
@@ -18,7 +19,11 @@ class PostController extends Controller
 
         return view("posts.samples.{$slug}", [
             'post' => $post,
-            'package' => $post['package'] ? [...config("packages.{$post['package']}"), 'slug' => $post['package']] : null,
+            'package' => $post['package'] ? [
+                ...config("packages.{$post['package']}"),
+                'slug' => $post['package'],
+                'url' => $docs->url($post['package']) ?? config("packages.{$post['package']}.repository"),
+            ] : null,
             'previous' => $posts->get($index + 1),
             'next' => $posts->get($index - 1),
         ]);

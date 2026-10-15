@@ -13,6 +13,8 @@
         <link rel="icon" href="/favicon-96x96.png" type="image/png" sizes="96x96">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
+        <x-locale.alternate />
+
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>

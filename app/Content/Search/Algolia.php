@@ -32,10 +32,12 @@ class Algolia
             $this->wait($temporary, $response->json('taskID'));
         }
 
-        $this->client()->post("/1/indexes/{$temporary}/operation", [
+        $move = $this->client()->post("/1/indexes/{$temporary}/operation", [
             'operation' => 'move',
             'destination' => $this->index,
         ])->throw();
+
+        $this->wait($temporary, $move->json('taskID'));
     }
 
     /**
@@ -55,6 +57,10 @@ class Algolia
             'attributesToSnippet' => ['content:24'],
             'snippetEllipsisText' => '…',
             'customRanking' => ['asc(position)'],
+            'indexLanguages' => ['en', 'it'],
+            'queryLanguages' => ['en', 'it'],
+            'ignorePlurals' => true,
+            'removeStopWords' => true,
         ];
     }
 

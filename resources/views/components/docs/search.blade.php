@@ -1,4 +1,4 @@
-@props(['package', 'version', 'locale' => 'en'])
+@props(['package', 'version'])
 
 @php
     $config = [
@@ -6,7 +6,8 @@
         'searchKey' => config('services.algolia.search_key'),
         'index' => config('services.algolia.index'),
         'enabled' => filled(config('services.algolia.app_id')) && filled(config('services.algolia.search_key')),
-        'filters' => "type:docs AND package:\"{$package['slug']}\" AND version:\"{$version}\" AND lang:{$locale}",
+        'lang' => app()->getLocale(),
+        'filters' => "type:docs AND package:\"{$package['slug']}\" AND version:\"{$version}\" AND lang:".app()->getLocale(),
     ];
     $searchIcon = '<svg class="size-[18px] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>';
 @endphp

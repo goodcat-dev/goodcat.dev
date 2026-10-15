@@ -38,6 +38,25 @@ class Docs
         return $this->files->isDirectory($this->directory($package, $version, $locale));
     }
 
+    public function url(string $package): ?string
+    {
+        $version = config("packages.{$package}.current_version");
+
+        if ($version === null) {
+            return null;
+        }
+
+        $locales = array_unique([app()->getLocale(), config('app.fallback_locale')]);
+
+        foreach ($locales as $locale) {
+            if ($this->exists($package, $version, $locale)) {
+                return route('docs.index', [$package, 'lang' => $locale]);
+            }
+        }
+
+        return null;
+    }
+
     /**
      * @return array<string, array<string, string>>
      */

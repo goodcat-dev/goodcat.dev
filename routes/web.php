@@ -5,13 +5,15 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', HomeController::class)->name('home');
+Route::lang(array_keys(config('app.locales')))->group(function () {
+    Route::get('/', HomeController::class)->name('home');
 
-Route::get('/blog/{slug}', [PostController::class, 'show'])->name('posts.show');
+    Route::get('/blog/{slug}', [PostController::class, 'show'])->name('posts.show');
 
-Route::get('/docs/{package}', [DocsController::class, 'index'])
-    ->where('package', '[a-z0-9-]+')
-    ->name('docs.index');
-Route::get('/docs/{package}/{version}/{page}', [DocsController::class, 'show'])
-    ->where(['package' => '[a-z0-9-]+', 'version' => '\d+\.x', 'page' => '[a-z0-9-]+'])
-    ->name('docs.show');
+    Route::get('/docs/{package}', [DocsController::class, 'index'])
+        ->where('package', '[a-z0-9-]+')
+        ->name('docs.index');
+    Route::get('/docs/{package}/{version}/{page}', [DocsController::class, 'show'])
+        ->where(['package' => '[a-z0-9-]+', 'version' => '\d+\.x', 'page' => '[a-z0-9-]+'])
+        ->name('docs.show');
+});

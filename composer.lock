@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e38dedd76c00071eef0d5bf0a2cf94ca",
+    "content-hash": "4dd1ffc902c12d697a08152a07315412",
     "packages": [
         {
             "name": "brick/math",
@@ -581,6 +581,78 @@
                 }
             ],
             "time": "2025-12-03T09:33:47+00:00"
+        },
+        {
+            "name": "goodcat/laravel-l10n",
+            "version": "v0.5.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/goodcat-dev/laravel-l10n.git",
+                "reference": "033b25e965f004a694a418b6fd552fb7f36ea0bd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/goodcat-dev/laravel-l10n/zipball/033b25e965f004a694a418b6fd552fb7f36ea0bd",
+                "reference": "033b25e965f004a694a418b6fd552fb7f36ea0bd",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": "^12.44.0|^13.0",
+                "illuminate/routing": "^12.44.0|^13.0",
+                "illuminate/support": "^12.44.0|^13.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.5",
+                "laravel/pint": "^1.22",
+                "laravel/wayfinder": "^0.1.20",
+                "orchestra/testbench": "^10.4|^11.0",
+                "pestphp/pest": "^3.8|^4.4",
+                "pestphp/pest-plugin-laravel": "^3.0|^4.0",
+                "tightenco/ziggy": "^2.0"
+            },
+            "suggest": {
+                "laravel/wayfinder": "Required to use the l10n TypeScript route() helper (^0.1)",
+                "tightenco/ziggy": "Required to use the l10n JavaScript route() helper (^2.0)"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "L10n": "Goodcat\\L10n\\Facades\\L10n"
+                    },
+                    "providers": [
+                        "Goodcat\\L10n\\L10nServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Goodcat\\L10n\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matteo Palazzo",
+                    "email": "outlaw.plz@gmail.com"
+                }
+            ],
+            "description": "An opinionated Laravel package for app localization",
+            "keywords": [
+                "goodcat",
+                "l10n",
+                "laravel",
+                "localization"
+            ],
+            "support": {
+                "issues": "https://github.com/goodcat-dev/laravel-l10n/issues",
+                "source": "https://github.com/goodcat-dev/laravel-l10n/tree/v0.5.3"
+            },
+            "time": "2026-10-01T21:24:38+00:00"
         },
         {
             "name": "graham-campbell/result-type",

@@ -9,7 +9,7 @@
         <section class="mx-auto max-w-7xl px-5 pt-12 pb-14 md:px-8 md:pt-18">
             <div class="flex flex-wrap items-center gap-2.5">
                 @if ($package)
-                    <a href="{{ route('docs.index', $package['slug']) }}" class="inline-flex -rotate-2 items-center gap-2 rounded-2xl bg-pkg px-4 py-2 text-[15px] font-bold text-pkg-ink squircle hover:text-pkg-ink">{{ $package['name'] }}</a>
+                    <a href="{{ $package['url'] }}" class="inline-flex -rotate-2 items-center gap-2 rounded-2xl bg-pkg px-4 py-2 text-[15px] font-bold text-pkg-ink squircle hover:text-pkg-ink">{{ $package['name'] }}</a>
                 @endif
                 @foreach ($post['tags'] as $tag)
                     <span class="rounded-full bg-ink-3 px-3 py-1.5 font-mono text-[13px] text-mist">{{ $tag }}</span>
@@ -44,7 +44,7 @@
                         <code class="mt-5 inline-block rounded-[18px] bg-pkg-ink px-4 py-2.5 font-mono text-sm text-pkg-light squircle">composer require goodcat/{{ $package['slug'] }}</code>
                     </div>
                     <div class="flex flex-wrap gap-3">
-                        <a href="{{ route('docs.index', $package['slug']) }}" class="inline-flex h-13 items-center rounded-full bg-pkg-ink px-[26px] text-[17px] font-bold text-pkg-light hover:text-pkg-light">Read the docs →</a>
+                        <a href="{{ $package['url'] }}" class="inline-flex h-13 items-center rounded-full bg-pkg-ink px-[26px] text-[17px] font-bold text-pkg-light hover:text-pkg-light">Read the docs →</a>
                         <a href="{{ $package['repository'] }}" class="inline-flex h-13 items-center rounded-full px-[26px] text-[17px] font-bold text-pkg-ink shadow-[inset_0_0_0_2px_var(--pkg-ink)] hover:text-pkg-ink">GitHub</a>
                     </div>
                 </div>

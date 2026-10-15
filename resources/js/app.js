@@ -91,6 +91,9 @@ Alpine.data('docsSearch', (config) => ({
                 body: JSON.stringify({
                     query,
                     filters: config.filters,
+                    queryLanguages: [config.lang],
+                    ignorePlurals: [config.lang],
+                    removeStopWords: [config.lang],
                     hitsPerPage: 8,
                     highlightPreTag: '__mark__',
                     highlightPostTag: '__/mark__',

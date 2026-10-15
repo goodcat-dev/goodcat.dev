@@ -46,7 +46,7 @@
     @endif
 
     @if ($guides)
-        <h2 id="guides" class="mt-18 scroll-mt-6 text-[32px] font-extrabold tracking-[-0.035em] md:text-[40px]">Guides</h2>
+        <h2 id="guides" class="mt-18 scroll-mt-24 text-[32px] font-extrabold tracking-[-0.035em] md:text-[40px]">Guides</h2>
         <div class="mt-6 grid gap-3.5 sm:grid-cols-2">
             @foreach ($guides as $guide)
                 <a href="{{ $pageUrl($guide['page']) }}" class="flex flex-col gap-2.5 rounded-[32px] bg-ink-2 p-7 transition-transform duration-250 squircle hover:-translate-y-[3px] hover:text-chalk">
@@ -60,7 +60,7 @@
     @endif
 
     @if ($features)
-        <h2 id="features" class="mt-18 scroll-mt-6 text-[32px] font-extrabold tracking-[-0.035em] md:text-[40px]">Features</h2>
+        <h2 id="features" class="mt-18 scroll-mt-24 text-[32px] font-extrabold tracking-[-0.035em] md:text-[40px]">Features</h2>
         <div class="mt-6 flex flex-wrap gap-3.5">
             @foreach ($features as $feature)
                 @php($style = $featureStyles[$loop->index % count($featureStyles)])

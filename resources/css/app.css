@@ -79,11 +79,11 @@
         }
 
         & > h2 {
-            @apply mt-18 scroll-mt-6 text-[32px] leading-tight font-extrabold tracking-[-0.035em] md:text-[40px];
+            @apply mt-18 scroll-mt-24 text-[32px] leading-tight font-extrabold tracking-[-0.035em] md:text-[40px];
         }
 
         & > h3 {
-            @apply mt-12 scroll-mt-6 text-2xl font-extrabold tracking-[-0.02em];
+            @apply mt-12 scroll-mt-24 text-2xl font-extrabold tracking-[-0.02em];
         }
 
         & > h2 + h3 {

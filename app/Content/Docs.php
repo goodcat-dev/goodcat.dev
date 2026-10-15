@@ -49,6 +49,24 @@ class Docs
     }
 
     /**
+     * @return list<array{package: string, version: string, locale: string, page: string}>
+     */
+    public function all(): array
+    {
+        return collect($this->paths())
+            ->map(fn (string $path) => explode('/', substr($path, strlen($this->basePath) + 1)))
+            ->filter(fn (array $segments) => count($segments) === 4)
+            ->map(fn (array $segments) => [
+                'package' => $segments[0],
+                'version' => $segments[1],
+                'locale' => $segments[2],
+                'page' => basename($segments[3], '.md'),
+            ])
+            ->values()
+            ->all();
+    }
+
+    /**
      * @return list<string>
      */
     public function paths(): array

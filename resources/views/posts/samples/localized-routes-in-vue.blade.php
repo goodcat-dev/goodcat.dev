@@ -1,10 +1,10 @@
 <x-layouts.post :post="$post" :package="$package" :previous="$previous" :next="$next">
-    <x-slot:title>Localized routes in Vue without passing <span class="inline-block -rotate-2 rounded-[32px] bg-acid px-[22px] pb-1.5 font-mono text-[0.8em] font-medium tracking-[-0.04em] text-ink squircle">lang</span> every time</x-slot:title>
+    <x-slot:title>Localized routes in Vue without passing <span class="inline-block -rotate-2 rounded-[32px] bg-acid px-[22px] pb-1.5 font-mono text-[0.8em] font-medium tracking-[-0.04em] text-black squircle">lang</span> every time</x-slot:title>
 
-    <p class="mt-0! text-[23px]! leading-[1.6]! text-zinc-200!">If you use <a href="{{ $package['url'] }}">laravel-l10n</a> with Vue, its Ziggy and Wayfinder helpers can select localized routes from <code>&lt;html lang&gt;</code> in the browser. During server-side rendering there is no document, so without an explicit <code>lang</code> they fall back to the canonical route. Passing <code>lang</code> on every call fixes that, but gets repetitive. We’ll build a Vue composable that reads the locale from Inertia’s page props instead. Choose the Ziggy or Wayfinder version below for your app; both let you specify <code>lang</code> when linking to another language.</p>
+    <p class="mt-0! text-[23px]! leading-[1.6]! text-zinc-200! light:text-zinc-800!">If you use <a href="{{ $package['url'] }}">laravel-l10n</a> with Vue, its Ziggy and Wayfinder helpers can select localized routes from <code>&lt;html lang&gt;</code> in the browser. During server-side rendering there is no document, so without an explicit <code>lang</code> they fall back to the canonical route. Passing <code>lang</code> on every call fixes that, but gets repetitive. We’ll build a Vue composable that reads the locale from Inertia’s page props instead. Choose the Ziggy or Wayfinder version below for your app; both let you specify <code>lang</code> when linking to another language.</p>
 
     <div class="mt-12 rounded-[40px] bg-ink-3 p-8 squircle">
-        <span class="font-mono text-[13px] text-acid">// before you start</span>
+        <span class="font-mono text-[13px] text-accent">// before you start</span>
         <p class="mt-3!">Make sure your Inertia pages receive the current locale as a shared prop. In <code>app/Http/Middleware/HandleInertiaRequests.php</code>:</p>
         <x-code-block file="HandleInertiaRequests.php" lang="php" dot="bg-[#7c5cff]" class="bg-ink"><span class="k">public function</span> <span class="f">share</span>(<span class="t">Request</span> <span class="p">$request</span>): <span class="k">array</span>
 {
@@ -16,9 +16,9 @@
     </div>
 
     <div x-data="tabs('ziggy')">
-        <div class="sticky top-4 z-10 mt-14 flex flex-wrap items-center justify-between gap-4 rounded-full bg-ink-3/92 py-2 pr-2 pl-6 shadow-[0_12px_30px_-12px_rgba(0,0,0,0.6)] backdrop-blur">
+        <div class="sticky top-4 z-10 mt-14 flex flex-wrap items-center justify-between gap-4 rounded-full bg-ink-3/92 py-2 pr-2 pl-6 shadow-[0_12px_30px_-12px_rgba(0,0,0,0.6)] backdrop-blur light:bg-ink-2/92 light:shadow-[0_12px_30px_-12px_rgba(14,14,17,0.25),inset_0_0_0_1px_var(--color-line)]">
             <span id="stack-label" class="text-base font-bold">Pick your stack</span>
-            <div role="tablist" aria-labelledby="stack-label" class="flex gap-1 rounded-full bg-ink p-1">
+            <div role="tablist" aria-labelledby="stack-label" class="flex gap-1 rounded-full bg-ink p-1 light:bg-ink-3">
                 @foreach (['ziggy' => 'Ziggy', 'wayfinder' => 'Wayfinder'] as $stack => $label)
                     <button
                         type="button"
@@ -27,7 +27,7 @@
                         aria-controls="panel-{{ $stack }}"
                         x-on:click="select('{{ $stack }}')"
                         x-bind:aria-selected="isActive('{{ $stack }}')"
-                        x-bind:class="isActive('{{ $stack }}') ? 'bg-acid text-ink' : 'text-fog hover:text-chalk'"
+                        x-bind:class="isActive('{{ $stack }}') ? 'bg-brand text-on-brand' : 'text-fog hover:text-chalk'"
                         class="h-11 cursor-pointer rounded-full px-[22px] text-base font-bold"
                     >{{ $label }}</button>
                 @endforeach

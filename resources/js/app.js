@@ -41,6 +41,30 @@ Alpine.data('feedback', () => ({
     },
 }));
 
+Alpine.data('themeToggle', () => ({
+    theme: document.documentElement.dataset.theme,
+
+    init() {
+        matchMedia('(prefers-color-scheme: light)').addEventListener('change', (event) => {
+            if (! localStorage.getItem('theme')) {
+                this.apply(event.matches ? 'light' : 'dark');
+            }
+        });
+
+        addEventListener('pagereveal', () => (this.theme = document.documentElement.dataset.theme));
+    },
+
+    toggle() {
+        this.apply(this.theme === 'light' ? 'dark' : 'light');
+        localStorage.setItem('theme', this.theme);
+    },
+
+    apply(theme) {
+        this.theme = theme;
+        document.documentElement.dataset.theme = theme;
+    },
+}));
+
 Alpine.data('docsSearch', (config) => ({
     query: '',
     hits: [],

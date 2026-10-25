@@ -3,11 +3,14 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
+@custom-variant light (&:where([data-theme='light'], [data-theme='light'] *));
+
 @theme static {
     --font-sans: var(--font-bricolage-grotesque), ui-sans-serif, system-ui, sans-serif;
     --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 
     --color-white: #ffffff;
+    --color-black: #0e0e11;
     --color-ink: #0e0e11;
     --color-ink-2: #16161b;
     --color-ink-3: #1b1b20;
@@ -24,12 +27,16 @@
     --color-mint-text: #6fe0c9;
     --color-tangerine: #ff6b2c;
     --color-tangerine-ink: #2b1006;
+    --color-tangerine-text: #ff6b2c;
     --color-cobalt: #2f7bff;
     --color-cyan: #7ee7f2;
     --color-pink: #ff8ad8;
     --color-peach: #ffb38a;
     --color-sun: #ffd166;
     --color-slate: #6b6b76;
+    --color-accent: #dbff75;
+    --color-brand: #dbff75;
+    --color-on-brand: #0e0e11;
 
     --animate-page-out: page-out 150ms ease-in both;
     --animate-page-in: page-in 300ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
@@ -68,8 +75,36 @@
         --pkg-text: var(--color-mint-text);
     }
 
+    [data-theme='dark'] {
+        --color-ink: #0e0e11;
+        --color-ink-2: #16161b;
+        --color-ink-3: #1b1b20;
+        --color-ink-4: #1f1f26;
+        --color-line: #26262d;
+        --color-mist: #9b9ba6;
+        --color-fog: #c4c4cc;
+        --color-chalk: #f4f4f5;
+    }
+
+    [data-theme='light'] {
+        --color-ink: #f7f7f4;
+        --color-ink-2: #ffffff;
+        --color-ink-3: #ecece7;
+        --color-ink-4: #e4e4de;
+        --color-line: #dadad3;
+        --color-mist: #696973;
+        --color-fog: #3a3a42;
+        --color-chalk: #0e0e11;
+        --color-mint-text: #0f7a68;
+        --color-grape-text: #5a36f0;
+        --color-tangerine-text: #b8430f;
+        --color-accent: #6d4aff;
+        --color-brand: #0e0e11;
+        --color-on-brand: #dbff75;
+    }
+
     html {
-        @apply bg-ink;
+        @apply bg-ink scheme-dark light:scheme-light;
     }
 
     body {
@@ -77,11 +112,11 @@
     }
 
     ::selection {
-        @apply bg-acid text-ink;
+        @apply bg-acid text-black;
     }
 
     :focus-visible {
-        @apply outline-2 outline-offset-2 outline-acid;
+        @apply outline-2 outline-offset-2 outline-accent;
     }
 
     [x-cloak] {
@@ -126,11 +161,11 @@
         }
 
         & :where(p, li, td) a {
-            @apply font-bold text-pkg-text hover:text-acid;
+            @apply font-bold text-pkg-text hover:text-accent;
         }
 
         & strong {
-            @apply font-bold text-white;
+            @apply font-bold text-white light:text-chalk;
         }
 
         & :not(pre) > code {

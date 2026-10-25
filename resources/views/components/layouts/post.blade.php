@@ -19,7 +19,7 @@
             <h1 class="mt-8 max-w-[1080px] text-5xl leading-[0.98] font-extrabold tracking-[-0.05em] md:text-[92px]">{{ $title ?? $post['title'] }}</h1>
 
             <div class="mt-9 flex flex-wrap items-center gap-3.5 font-mono text-[13px] text-mist">
-                <x-site.blob class="size-9 text-ink">
+                <x-site.blob class="size-9 text-on-brand">
                     <x-site.cat-mark :stroke-width="4" class="size-7" />
                 </x-site.blob>
                 <span class="text-chalk">by Matteo</span>
@@ -30,7 +30,7 @@
             </div>
         </section>
 
-        <article class="mx-auto max-w-[820px] px-5 pb-24 md:px-8 [&_.c]:text-slate [&_.f]:text-cyan [&_.k]:text-pink [&_.p]:text-peach [&_.s]:text-acid [&_.t]:text-sun [&_:not(pre)>code]:rounded-lg [&_:not(pre)>code]:bg-ink-4 [&_:not(pre)>code]:px-[7px] [&_:not(pre)>code]:py-0.5 [&_:not(pre)>code]:font-mono [&_:not(pre)>code]:text-[.84em] [&_:not(pre)>code]:text-chalk [&_h2]:mt-14 [&_h2]:scroll-mt-24 [&_h2]:text-[40px] [&_h2]:leading-none [&_h2]:font-extrabold [&_h2]:tracking-[-0.045em] md:[&_h2]:text-[56px] [&_p]:mt-[22px] [&_p]:text-[19px] [&_p]:leading-[1.75] [&_p]:text-fog [&_p_a]:font-bold [&_p_a]:text-pkg-text [&_p_a]:hover:text-acid">
+        <article class="mx-auto max-w-[820px] px-5 pb-24 md:px-8 [&_.c]:text-slate [&_.f]:text-cyan [&_.k]:text-pink [&_.p]:text-peach [&_.s]:text-acid [&_.t]:text-sun [&_:not(pre)>code]:rounded-lg [&_:not(pre)>code]:bg-ink-4 [&_:not(pre)>code]:px-[7px] [&_:not(pre)>code]:py-0.5 [&_:not(pre)>code]:font-mono [&_:not(pre)>code]:text-[.84em] [&_:not(pre)>code]:text-chalk [&_h2]:mt-14 [&_h2]:scroll-mt-24 [&_h2]:text-[40px] [&_h2]:leading-none [&_h2]:font-extrabold [&_h2]:tracking-[-0.045em] md:[&_h2]:text-[56px] [&_p]:mt-[22px] [&_p]:text-[19px] [&_p]:leading-[1.75] [&_p]:text-fog [&_p_a]:font-bold [&_p_a]:text-pkg-text [&_p_a]:hover:text-accent">
             {{ $slot }}
         </article>
 

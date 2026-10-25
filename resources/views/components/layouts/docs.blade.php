@@ -17,6 +17,7 @@
                     <a href="{{ $package['repository'] }}/blob/main/CHANGELOG.md" class="hidden px-3 py-2.5 text-fog xl:block">{{ __('Changelog') }}</a>
                     <a href="{{ $package['repository'] }}/issues" class="hidden px-3 py-2.5 text-fog xl:block">{{ __('Issues') }}</a>
                     <x-l10n::switcher class="mr-1 hidden lg:block" />
+                    <x-theme-toggle />
                     <a href="{{ $package['repository'] }}" class="hidden h-11 items-center gap-2 rounded-full bg-chalk px-[18px] font-bold text-ink hover:text-ink lg:inline-flex xl:ml-2">
                         <x-icons.github />
                         GitHub
@@ -57,12 +58,12 @@
                     <span>© goodcat.dev · Design, Code, Repeat.</span>
                     <nav aria-label="{{ __('Footer') }}" class="flex items-center gap-5">
                         <a href="{{ route('home') }}" aria-label="goodcat.dev" title="goodcat.dev" class="transition-transform hover:-rotate-6">
-                            <x-site.blob class="size-8 text-ink">
+                            <x-site.blob class="size-8 text-on-brand">
                                 <x-site.cat-mark :stroke-width="4.4" class="size-6" />
                             </x-site.blob>
                         </a>
-                        <a href="{{ $package['repository'] }}" class="hover:text-acid">GitHub</a>
-                        <a href="{{ $package['packagist'] }}" class="hover:text-acid">Packagist</a>
+                        <a href="{{ $package['repository'] }}" class="hover:text-accent">GitHub</a>
+                        <a href="{{ $package['packagist'] }}" class="hover:text-accent">Packagist</a>
                     </nav>
                 </footer>
             </main>

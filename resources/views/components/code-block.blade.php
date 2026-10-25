@@ -11,7 +11,7 @@
     };
 @endphp
 
-<figure @if ($copyable) data-code x-data="copyCode" @endif {{ $attributes->class('group relative mt-7 overflow-hidden rounded-[28px] bg-ink-2 shadow-[inset_0_0_0_1px_var(--color-line)] squircle') }}>
+<figure @if ($copyable) data-code x-data="copyCode" @endif data-theme="dark" {{ $attributes->class('group relative mt-7 overflow-hidden rounded-[28px] bg-ink-2 shadow-[inset_0_0_0_1px_var(--color-line)] squircle') }}>
     @if ($file)
         <figcaption class="flex h-12 items-center gap-2.5 border-b border-line pr-1 pl-5 font-mono text-[12.5px] text-mist">
             <span aria-hidden="true" class="size-2.5 shrink-0 rounded-[3px] {{ $dot }}"></span>

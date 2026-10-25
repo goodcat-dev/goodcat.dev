@@ -3,6 +3,6 @@
     'bg-ink-2 shadow-[inset_0_0_0_2px_var(--pkg-main)]' => $type === 'note',
     'bg-tangerine/10 shadow-[inset_0_0_0_2px_var(--color-tangerine)]' => $type === 'warning',
 ])>
-    <span @class(['shrink-0 pt-0.5 font-mono text-xs', 'text-pkg-text' => $type === 'note', 'text-tangerine' => $type === 'warning'])>// {{ __($type) }}</span>
+    <span @class(['shrink-0 pt-0.5 font-mono text-xs', 'text-pkg-text' => $type === 'note', 'text-tangerine-text' => $type === 'warning'])>// {{ __($type) }}</span>
     <div class="min-w-0">{!! $html !!}</div>
 </aside>

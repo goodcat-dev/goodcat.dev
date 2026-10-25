@@ -18,7 +18,7 @@
             <p class="max-w-[560px] text-[22px] leading-normal text-fog">
                 Hi, I’m Matteo. I build things with Laravel, write about it here, and give the useful bits away as open source packages.
             </p>
-            <a href="#blog" class="inline-flex h-13 items-center gap-2.5 rounded-full bg-acid px-[26px] text-[17px] font-bold text-ink">
+            <a href="#blog" class="inline-flex h-13 items-center gap-2.5 rounded-full bg-brand px-[26px] text-[17px] font-bold text-on-brand">
                 Start reading
                 <svg class="size-[18px]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 10h10M11 6l4 4-4 4" /></svg>
             </a>

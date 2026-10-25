@@ -20,11 +20,12 @@
                     @class([
                         'rounded-full px-[18px] py-2.5',
                         'bg-chalk font-medium text-ink' => $active === $key,
-                        'hover:text-acid' => $active !== $key,
+                        'hover:text-accent' => $active !== $key,
                     ])
                 >{{ $item['label'] }}</a>
             @endforeach
         </nav>
         <x-l10n::switcher align="responsive" />
+        <x-theme-toggle />
     </div>
 </header>

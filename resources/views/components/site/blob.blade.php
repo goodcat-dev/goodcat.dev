@@ -1,4 +1,4 @@
-@props(['shape' => 'fill-acid'])
+@props(['shape' => 'fill-brand'])
 
 <span {{ $attributes->class('relative isolate flex shrink-0 items-center justify-center') }} aria-hidden="true">
     <svg viewBox="0 0 24 24" class="absolute inset-0 -z-10 size-full">

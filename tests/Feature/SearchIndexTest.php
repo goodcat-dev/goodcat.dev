@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Content\Search\DocsRecords;
 use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Sleep;
 use Tests\TestCase;
@@ -20,8 +21,15 @@ class SearchIndexTest extends TestCase
             'services.algolia.app_id' => 'APP',
             'services.algolia.admin_key' => 'admin-key',
             'services.algolia.search_key' => 'search-key',
-            'services.algolia.index' => 'goodcat_content',
+            'services.algolia.index' => 'testing_content',
         ]);
+    }
+
+    protected function tearDown(): void
+    {
+        File::delete(storage_path('framework/search/testing_content.hash'));
+
+        parent::tearDown();
     }
 
     public function test_records_are_one_per_section_with_anchor_and_hierarchy(): void
@@ -45,29 +53,69 @@ class SearchIndexTest extends TestCase
 
     public function test_search_index_rebuilds_a_temporary_index_and_moves_it(): void
     {
-        Http::fake([
-            '*/task/*' => Http::response(['status' => 'published']),
-            '*' => Http::response(['taskID' => 1]),
-        ]);
+        $this->fakeAlgolia();
 
         $this->artisan('search:index')->assertSuccessful();
 
         Http::assertSent(fn (Request $request) => $request->method() === 'POST'
-            && str_ends_with($request->url(), '/1/indexes/goodcat_content_tmp/batch')
+            && str_ends_with($request->url(), '/1/indexes/testing_content_tmp/batch')
             && $request->hasHeader('X-Algolia-API-Key', 'admin-key')
             && collect($request['requests'])->contains('body.objectID', 'docs:laravel-l10n:0.x:en:quickstart#installation'));
 
-        Http::assertSent(fn (Request $request) => str_ends_with($request->url(), '/1/indexes/goodcat_content_tmp/operation')
+        Http::assertSent(fn (Request $request) => str_ends_with($request->url(), '/1/indexes/testing_content_tmp/operation')
             && $request['operation'] === 'move'
-            && $request['destination'] === 'goodcat_content');
+            && $request['destination'] === 'testing_content');
     }
 
-    public function test_search_index_fails_without_credentials(): void
+    public function test_search_index_skips_unchanged_content(): void
+    {
+        $this->fakeAlgolia();
+
+        $this->artisan('search:index')->assertSuccessful();
+        $sent = count(Http::recorded());
+
+        $this->artisan('search:index')
+            ->expectsOutputToContain('testing_content is up to date')
+            ->assertSuccessful();
+
+        $this->assertCount($sent, Http::recorded());
+    }
+
+    public function test_search_index_rebuilds_unchanged_content_when_forced(): void
+    {
+        $this->fakeAlgolia();
+
+        $this->artisan('search:index')->assertSuccessful();
+        $sent = count(Http::recorded());
+
+        $this->artisan('search:index', ['--force' => true])->assertSuccessful();
+
+        $this->assertGreaterThan($sent, count(Http::recorded()));
+    }
+
+    public function test_search_index_fails_when_a_task_is_never_published(): void
+    {
+        Http::fake([
+            '*/task/*' => Http::response(['status' => 'notPublished']),
+            '*' => Http::response(['taskID' => 1]),
+        ]);
+
+        $this->artisan('search:index')
+            ->expectsOutputToContain('was not published within 60 seconds')
+            ->assertFailed();
+
+        Sleep::assertSleptTimes(120);
+        $this->assertFileDoesNotExist(storage_path('framework/search/testing_content.hash'));
+    }
+
+    public function test_search_index_is_skipped_without_credentials(): void
     {
         config(['services.algolia.admin_key' => null]);
         Http::fake();
 
-        $this->artisan('search:index')->assertFailed();
+        $this->artisan('search:index')
+            ->expectsOutputToContain('Algolia is not configured')
+            ->assertSuccessful();
 
         Http::assertNothingSent();
     }
@@ -88,5 +136,13 @@ class SearchIndexTest extends TestCase
             ->assertOk()
             ->assertSee('Search the docs')
             ->assertSee('\u0022enabled\u0022:false', false);
+    }
+
+    private function fakeAlgolia(): void
+    {
+        Http::fake([
+            '*/task/*' => Http::response(['status' => 'published']),
+            '*' => Http::response(['taskID' => 1]),
+        ]);
     }
 }

@@ -5,9 +5,14 @@ namespace App\Content\Search;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Sleep;
+use RuntimeException;
 
 class Algolia
 {
+    private const int WAIT_ATTEMPTS = 120;
+
+    private const int WAIT_INTERVAL_MILLISECONDS = 500;
+
     public function __construct(
         private string $appId,
         private string $adminKey,
@@ -41,6 +46,14 @@ class Algolia
     }
 
     /**
+     * @param  list<array<string, mixed>>  $records
+     */
+    public function fingerprint(array $records): string
+    {
+        return hash('xxh128', json_encode([$this->index, $this->settings(), $records], JSON_THROW_ON_ERROR));
+    }
+
+    /**
      * @return array<string, mixed>
      */
     private function settings(): array
@@ -70,9 +83,17 @@ class Algolia
             return;
         }
 
-        while ($this->client()->get("/1/indexes/{$index}/task/{$taskId}")->throw()->json('status') !== 'published') {
-            Sleep::for(500)->milliseconds();
+        for ($attempt = 0; $attempt < self::WAIT_ATTEMPTS; $attempt++) {
+            if ($this->client()->get("/1/indexes/{$index}/task/{$taskId}")->throw()->json('status') === 'published') {
+                return;
+            }
+
+            Sleep::for(self::WAIT_INTERVAL_MILLISECONDS)->milliseconds();
         }
+
+        $seconds = self::WAIT_ATTEMPTS * self::WAIT_INTERVAL_MILLISECONDS / 1000;
+
+        throw new RuntimeException("Algolia task {$taskId} on {$index} was not published within {$seconds} seconds.");
     }
 
     private function client(): PendingRequest

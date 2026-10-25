@@ -10,6 +10,7 @@
     run_node
     optimize_laravel
     purge_cdn
+    search_index
 @endstory
 
 @task('pull_repository')
@@ -50,4 +51,10 @@
     echo 'Purge CDN cache'
     cd {{ $app_dir }}
     php artisan cdn:purge
+@endtask
+
+@task('search_index')
+    echo 'Update search index'
+    cd {{ $app_dir }}
+    php artisan search:index
 @endtask

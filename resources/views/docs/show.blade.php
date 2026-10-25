@@ -12,7 +12,7 @@
     ];
 @endphp
 
-<x-layouts.docs :package="$package" :version="$version" :current="$page->slug" :navigation="$navigation" :title="$isIntroduction ? null : $page->title" :toc="$toc">
+<x-layouts.docs :package="$package" :version="$version" :current="$page->slug" :navigation="$navigation" :title="$isIntroduction ? null : $page->title" :toc="$toc" :versions="$versions">
     @if ($isIntroduction)
         <section class="rounded-[48px] bg-[radial-gradient(circle_at_0_100%,var(--pkg-main)_50%,var(--pkg-light)_130%)] px-7 pt-12 pb-10 text-pkg-ink squircle md:px-12 md:pt-14 md:pb-12">
             <p class="font-mono text-[13px] break-all">composer require goodcat/{{ $package['slug'] }}</p>

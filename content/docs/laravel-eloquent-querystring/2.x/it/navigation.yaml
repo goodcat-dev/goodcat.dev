@@ -1,0 +1,11 @@
+'per iniziare':
+  introduction: 'Introduzione'
+  quickstart: 'Guida rapida'
+  upgrade: 'Guida all''aggiornamento'
+filtri:
+  filter-methods: 'Metodi filtro'
+  applying-filters: 'Applicare i filtri'
+  filter-objects: 'Oggetti filtro'
+avanzate:
+  query-requests: 'Richieste QUERY'
+  caching: 'Cache'

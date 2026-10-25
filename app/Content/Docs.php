@@ -38,6 +38,30 @@ class Docs
         return $this->files->isDirectory($this->directory($package, $version, $locale));
     }
 
+    public function has(string $package, string $version, string $page, string $locale): bool
+    {
+        return $this->files->exists($this->path($package, $version, $page, $locale));
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function versions(string $package, string $locale = 'en'): array
+    {
+        $directory = "{$this->basePath}/{$package}";
+
+        if (! $this->files->isDirectory($directory)) {
+            return [];
+        }
+
+        return collect($this->files->directories($directory))
+            ->map(fn (string $path) => basename($path))
+            ->filter(fn (string $version) => $this->exists($package, $version, $locale))
+            ->sortByDesc(fn (string $version) => (int) $version)
+            ->values()
+            ->all();
+    }
+
     public function url(string $package): ?string
     {
         $version = config("packages.{$package}.current_version");

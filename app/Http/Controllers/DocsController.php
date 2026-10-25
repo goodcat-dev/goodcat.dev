@@ -40,6 +40,11 @@ class DocsController extends Controller
             'titles' => $titles,
             'section' => collect($navigation)->search(fn (array $pages) => array_key_exists($page, $pages)) ?: null,
             'next' => $position !== false ? ($slugs[$position + 1] ?? null) : null,
+            'versions' => collect($docs->versions($package, $locale))
+                ->mapWithKeys(fn (string $candidate) => [
+                    $candidate => route('docs.show', [$package, $candidate, $docs->has($package, $candidate, $page, $locale) ? $page : 'introduction']),
+                ])
+                ->all(),
         ]);
     }
 }

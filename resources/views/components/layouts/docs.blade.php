@@ -1,4 +1,4 @@
-@props(['package', 'version', 'current', 'navigation', 'toc' => [], 'title' => null])
+@props(['package', 'version', 'current', 'navigation', 'toc' => [], 'versions' => [], 'title' => null])
 
 @php
     $pageTitle = $title ? "{$title} · {$package['name']}" : $package['name'];
@@ -29,6 +29,7 @@
                 </nav>
             </div>
             <div id="docs-mobile-nav" x-show="open" x-cloak x-on:click="$event.target.closest('a') && (open = false)" class="max-h-[calc(100dvh-72px)] overflow-y-auto overscroll-contain border-t border-ink-4 px-2 pt-6 pb-10 md:px-3 lg:hidden">
+                <x-docs.version-switcher :package="$package" :version="$version" :versions="$versions" class="mb-7" />
                 <x-docs.navigation :package="$package" :version="$version" :current="$current" :navigation="$navigation" :toc="$toc" />
                 <div class="mt-10 flex flex-col gap-7 border-t border-ink-4 pt-8 text-[15px]">
                     <div>
@@ -48,10 +49,13 @@
 
         <div class="mx-auto flex max-w-[1360px] gap-14 px-5 md:px-6">
             <aside class="sticky top-[72px] hidden self-start max-h-[calc(100dvh-72px)] w-60 shrink-0 overflow-y-auto overscroll-contain py-10 lg:block">
+                <x-docs.version-switcher :package="$package" :version="$version" :versions="$versions" class="mb-7" />
                 <x-docs.navigation :package="$package" :version="$version" :current="$current" :navigation="$navigation" :toc="$toc" />
             </aside>
 
             <main class="min-w-0 max-w-[900px] flex-1 pt-10 pb-16">
+                <x-docs.version-notice :package="$package" :version="$version" :versions="$versions" />
+
                 {{ $slot }}
 
                 <footer class="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-ink-4 pt-6 text-sm text-mist">

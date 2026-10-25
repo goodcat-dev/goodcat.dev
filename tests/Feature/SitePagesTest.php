@@ -13,7 +13,7 @@ class SitePagesTest extends TestCase
             ->assertSee('laravel-l10n')
             ->assertSee('composer require goodcat/laravel-l10n')
             ->assertSee('href="'.route('docs.index', 'laravel-l10n').'"', false)
-            ->assertSee('href="https://github.com/goodcat-dev/laravel-filter-querystring"', false)
+            ->assertSee('href="'.route('docs.index', 'laravel-eloquent-querystring').'"', false)
             ->assertSee('Localized routes in Vue without passing lang every time')
             ->assertSee(route('posts.show', 'localized-routes-in-vue'))
             ->assertSee('href="'.route('posts.index').'"', false);

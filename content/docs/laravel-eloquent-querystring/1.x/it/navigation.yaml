@@ -1,0 +1,9 @@
+'per iniziare':
+  introduction: 'Introduzione'
+  quickstart: 'Guida rapida'
+filtri:
+  filter-methods: 'Metodi filtro'
+  applying-filters: 'Applicare i filtri'
+  filter-objects: 'Oggetti filtro'
+avanzate:
+  caching: 'Cache'

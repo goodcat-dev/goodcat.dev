@@ -8,7 +8,7 @@
     ];
 @endphp
 
-<header class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 py-5 md:px-8">
+<header class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 py-5 [view-transition-name:site-header] md:px-8">
     <x-site.logo />
 
     <div class="flex flex-wrap items-center gap-2">

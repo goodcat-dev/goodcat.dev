@@ -30,6 +30,23 @@
     --color-peach: #ffb38a;
     --color-sun: #ffd166;
     --color-slate: #6b6b76;
+
+    --animate-page-out: page-out 150ms ease-in both;
+    --animate-page-in: page-in 300ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+
+    @keyframes page-out {
+        to {
+            opacity: 0;
+            translate: 0 -8px;
+        }
+    }
+
+    @keyframes page-in {
+        from {
+            opacity: 0;
+            translate: 0 12px;
+        }
+    }
 }
 
 @theme inline {
@@ -69,6 +86,20 @@
 
     [x-cloak] {
         display: none !important;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        @view-transition {
+            navigation: auto;
+        }
+    }
+
+    ::view-transition-old(root) {
+        animation: var(--animate-page-out);
+    }
+
+    ::view-transition-new(root) {
+        animation: var(--animate-page-in);
     }
 }
 

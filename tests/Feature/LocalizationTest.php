@@ -11,7 +11,7 @@ class LocalizationTest extends TestCase
     {
         $this->get('/it')
             ->assertOk()
-            ->assertSee('<html lang="it">', false)
+            ->assertSee('<html lang="it"', false)
             ->assertSee('href="'.url('/it/blog/localized-routes-in-vue').'"', false)
             ->assertSee('href="'.url('/it/docs/laravel-l10n').'"', false);
     }
@@ -20,7 +20,7 @@ class LocalizationTest extends TestCase
     {
         $this->get('/')
             ->assertOk()
-            ->assertSee('<html lang="en">', false)
+            ->assertSee('<html lang="en"', false)
             ->assertSee('href="'.url('/blog/localized-routes-in-vue').'"', false);
     }
 

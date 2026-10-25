@@ -15,6 +15,20 @@
 
         <x-l10n::alternate />
 
+        <script type="speculationrules">
+            {
+                "prerender": [{
+                    "where": {
+                        "and": [
+                            { "href_matches": "/*" },
+                            { "not": { "selector_matches": "[rel~=nofollow], [target=_blank], [download]" } }
+                        ]
+                    },
+                    "eagerness": "moderate"
+                }]
+            }
+        </script>
+
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>

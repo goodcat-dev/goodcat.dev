@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4dd1ffc902c12d697a08152a07315412",
+    "content-hash": "4bd2cad6dbeef2e9e3dcdbeff6ac49d2",
     "packages": [
         {
             "name": "brick/math",
@@ -584,16 +584,16 @@
         },
         {
             "name": "goodcat/laravel-l10n",
-            "version": "v0.5.3",
+            "version": "v0.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/goodcat-dev/laravel-l10n.git",
-                "reference": "033b25e965f004a694a418b6fd552fb7f36ea0bd"
+                "reference": "998aa2a96afd65a8d13d73241a8b6c1e651ca721"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/goodcat-dev/laravel-l10n/zipball/033b25e965f004a694a418b6fd552fb7f36ea0bd",
-                "reference": "033b25e965f004a694a418b6fd552fb7f36ea0bd",
+                "url": "https://api.github.com/repos/goodcat-dev/laravel-l10n/zipball/998aa2a96afd65a8d13d73241a8b6c1e651ca721",
+                "reference": "998aa2a96afd65a8d13d73241a8b6c1e651ca721",
                 "shasum": ""
             },
             "require": {
@@ -650,9 +650,9 @@
             ],
             "support": {
                 "issues": "https://github.com/goodcat-dev/laravel-l10n/issues",
-                "source": "https://github.com/goodcat-dev/laravel-l10n/tree/v0.5.3"
+                "source": "https://github.com/goodcat-dev/laravel-l10n/tree/v0.5.4"
             },
-            "time": "2026-10-01T21:24:38+00:00"
+            "time": "2026-10-24T20:16:39+00:00"
         },
         {
             "name": "graham-campbell/result-type",

@@ -8,7 +8,7 @@
     <x-package-scope :package="$package" x-data="disclosure" x-on:keydown.escape.window="open = false" class="min-h-screen">
         <svg class="absolute size-0" aria-hidden="true"><defs><radialGradient id="docs-mark" cx="0" cy="1" r="1.414"><stop offset="0" class="[stop-color:var(--pkg-main)]" /><stop offset="0.55" class="[stop-color:var(--pkg-main)]" /><stop offset="1" class="[stop-color:var(--pkg-light)]" /></radialGradient></defs></svg>
 
-        <header class="sticky top-0 z-30 border-b border-ink-4 bg-ink/85 backdrop-blur-md">
+        <header class="sticky top-0 z-30 border-b border-ink-4 bg-ink/85 backdrop-blur-md [view-transition-name:docs-header]">
             <div class="mx-auto flex h-[72px] max-w-[1360px] items-center gap-3 px-5 md:gap-5 md:px-6">
                 <x-docs.logo :package="$package" />
                 <x-docs.search :package="$package" :version="$version" class="ml-auto md:ml-6 md:max-w-[380px] md:flex-[0_1_380px]" />

@@ -10,20 +10,16 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
 #[Signature('content:cache')]
-#[Description('Compile all Markdown content into highlighted HTML')]
+#[Description('Compile changed Markdown content into highlighted HTML and rebuild the posts index')]
 class ContentCache extends Command
 {
     public function handle(ContentCompiler $compiler, Docs $docs, Posts $posts): int
     {
-        $compiler->clear();
-
         foreach ($docs->all() as $entry) {
-            $compiler->compile($docs->path($entry['package'], $entry['version'], $entry['page'], $entry['locale']), $entry['locale']);
+            $compiler->get($docs->path($entry['package'], $entry['version'], $entry['page'], $entry['locale']), $entry['locale']);
         }
 
-        foreach ($posts->entries() as $entry) {
-            $compiler->compile($posts->path($entry['key'], $entry['locale']), $entry['locale']);
-        }
+        $posts->buildIndex();
 
         $this->components->info('Content cached successfully.');
 

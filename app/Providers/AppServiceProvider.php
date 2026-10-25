@@ -33,6 +33,8 @@ class AppServiceProvider extends ServiceProvider
             $app->make(Filesystem::class),
             $app->make(ContentCompiler::class),
             base_path('content/posts'),
+            storage_path('framework/content/posts.php'),
+            ! $app->isProduction(),
         ));
     }
 

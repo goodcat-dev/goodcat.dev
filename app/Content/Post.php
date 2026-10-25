@@ -10,7 +10,6 @@ readonly class Post implements HasLocalizedRouteKey
     /**
      * @param  array<string, string>  $slugs
      * @param  list<string>  $tags
-     * @param  array<string, string>  $sections
      */
     public function __construct(
         public string $key,
@@ -23,8 +22,6 @@ readonly class Post implements HasLocalizedRouteKey
         public ?string $package,
         public array $tags,
         public int $readingTime,
-        public string $html,
-        public array $sections,
     ) {}
 
     public function url(): string

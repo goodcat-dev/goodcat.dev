@@ -1,3 +1,3 @@
 <x-layouts.post :post="$post" :package="$package" :previous="$previous" :next="$next">
-    {!! $post->html !!}
+    {!! $html !!}
 </x-layouts.post>

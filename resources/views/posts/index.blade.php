@@ -1,6 +1,6 @@
 @php
     $dots = ['fill-mint', 'fill-cobalt', 'fill-tangerine', 'fill-grape'];
-    $count = $years->flatten(1)->count();
+    $count = $paginator->total();
 @endphp
 
 <x-layouts.site title="Blog" active="blog">
@@ -10,7 +10,7 @@
     </section>
 
     @foreach ($years as $year => $posts)
-        <section aria-labelledby="year-{{ $year }}" class="mx-auto max-w-7xl px-5 pb-16 last-of-type:pb-30 md:px-8">
+        <section aria-labelledby="year-{{ $year }}" class="mx-auto max-w-7xl px-5 pb-16 md:px-8">
             <x-site.section-label id="year-{{ $year }}" class="mb-2">{{ $year }}</x-site.section-label>
             <div class="flex flex-col">
                 @foreach ($posts as $post)
@@ -21,4 +21,8 @@
             </div>
         </section>
     @endforeach
+
+    <div class="mx-auto max-w-7xl px-5 pb-30 md:px-8">
+        {{ $paginator->links() }}
+    </div>
 </x-layouts.site>

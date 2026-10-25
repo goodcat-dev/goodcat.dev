@@ -34,7 +34,18 @@ app()->getPreferredLocale(['en', 'es']) ?? 'en';
 ```php
 // Get the route's language, or the fallback locale for a non-localized route
 $request->route()->locale(); // Returns string
+
+// Check if the route is a canonical route with translations
+$request->route()->isCanonical(); // Returns bool
+
+// Check if the route is the translation of a canonical route
+$request->route()->isTranslation(); // Returns bool
+
+// Get the registered route for a locale, or null
+$request->route()->getTranslation('es'); // Returns ?Route
 ```
+
+Routes without `lang()` are neither canonical nor translations. `getTranslation()` answers from the canonical route and from any of its translations, and returns the canonical route for the fallback locale.
 
 ## Route matching
 

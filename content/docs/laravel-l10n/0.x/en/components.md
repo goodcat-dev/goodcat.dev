@@ -24,7 +24,7 @@ For a route with `es` and `it` translations, this will render:
 <link rel="alternate" hreflang="x-default" href="https://example.com/products/42" />
 ```
 
-The component includes all localized variants, the fallback locale, and an `x-default` entry pointing to the canonical route. It renders nothing for routes without translations.
+The component includes all localized variants, the fallback locale, and an `x-default` entry pointing to the canonical route. Every link keeps the query string of the current request. It renders nothing for routes without translations, and skips locales without a [localized route key](localized-routes#translated-route-keys).
 
 ## Locale switcher
 
@@ -44,7 +44,7 @@ For a route with `es` and `it` translations, this will render:
 </select>
 ```
 
-The current locale is automatically selected. The component renders nothing for routes without translations.
+The current locale is automatically selected, and the query string of the current request is kept. The component renders nothing for routes without translations, and skips locales without a [localized route key](localized-routes#translated-route-keys).
 
 You can pass any HTML attribute to the component:
 

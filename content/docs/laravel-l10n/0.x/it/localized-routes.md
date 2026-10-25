@@ -203,6 +203,57 @@ return [
 
 La route localizzata continua a risolvere `post` tramite il suo slug.
 
+### Chiavi di route tradotte
+
+Se è la chiave della route a essere tradotta, per esempio uno slug salvato per ogni locale, implementa il contratto `HasLocalizedRouteKey` sul model. Quando genera l'URL di una route localizzata, il package chiama `getLocalizedRouteKey()` passando il locale della route e il campo di binding. Questo esempio usa [spatie/laravel-translatable](https://github.com/spatie/laravel-translatable):
+
+```php title="app/Models/Post.php"
+use Goodcat\L10n\Contracts\HasLocalizedRouteKey;
+use Spatie\Translatable\HasTranslations;
+
+class Post extends Model implements HasLocalizedRouteKey
+{
+    use HasTranslations;
+
+    public array $translatable = ['slug'];
+
+    public function getLocalizedRouteKey(string $locale, ?string $field = null): ?string
+    {
+        return $this->getTranslation($field ?? $this->getRouteKeyName(), $locale, false) ?: null;
+    }
+}
+```
+
+```php
+route('posts.show', ['post' => $post, 'lang' => 'it']); // "https://example.com/it/articolo/ciao-mondo"
+```
+
+Restituisci `null` quando il model non ha una traduzione per un locale. Il [selettore di lingua](components#selettore-di-lingua), i [link hreflang](components#link-alternate-hreflang) e il [redirect al locale preferito](locale-preference#redirect-al-locale-preferito) saltano quel locale. Per `route()` e `action()`, vedi [Chiavi di route localizzate mancanti](url-generation#chiavi-di-route-localizzate-mancanti).
+
+Le richieste in ingresso vengono risolte dal binding del model. Per rispondere con un 404 quando il post non ha una traduzione, o quando il suo slug appartiene a un altro locale, cerca lo slug nel locale della route:
+
+```php title="app/Models/Post.php"
+public function resolveRouteBinding($value, $field = null): ?self
+{
+    $field ??= $this->getRouteKeyName();
+
+    return $this->where("$field->".app()->getLocale(), $value)->first();
+}
+```
+
+Per fare invece un redirect, lascia che il binding trovi lo slug in qualsiasi locale e manda il visitatore all'URL corretto:
+
+```php title="app/Http/Controllers/PostController.php"
+public function show(Request $request, Post $post)
+{
+    if ($request->route()->originalParameter('post') !== $post->getLocalizedRouteKey(app()->getLocale())) {
+        return redirect()->route('posts.show', $post, 301);
+    }
+
+    // ...
+}
+```
+
 ### Collisioni con no_prefix
 
 Senza un prefisso di lingua, due route possono finire con lo stesso URI. Con la strategia `no_prefix`, una traduzione che condivide dominio e URI con la route canonica o con una traduzione precedente viene saltata:

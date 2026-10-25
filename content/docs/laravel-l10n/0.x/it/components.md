@@ -24,7 +24,7 @@ Per una route con le traduzioni `es` e `it`, viene generato:
 <link rel="alternate" hreflang="x-default" href="https://example.com/products/42" />
 ```
 
-Il componente include tutte le varianti localizzate, il fallback locale e una voce `x-default` che punta alla route canonica. Non genera nulla per le route senza traduzioni.
+Il componente include tutte le varianti localizzate, il fallback locale e una voce `x-default` che punta alla route canonica. Ogni link mantiene la query string della richiesta corrente. Non genera nulla per le route senza traduzioni e salta i locale senza una [chiave di route localizzata](localized-routes#chiavi-di-route-tradotte).
 
 ## Selettore di lingua
 
@@ -44,7 +44,7 @@ Per una route con le traduzioni `es` e `it`, viene generato:
 </select>
 ```
 
-Il locale corrente viene selezionato automaticamente. Il componente non genera nulla per le route senza traduzioni.
+Il locale corrente viene selezionato automaticamente e la query string della richiesta corrente viene mantenuta. Il componente non genera nulla per le route senza traduzioni e salta i locale senza una [chiave di route localizzata](localized-routes#chiavi-di-route-tradotte).
 
 Puoi passare al componente qualsiasi attributo HTML:
 

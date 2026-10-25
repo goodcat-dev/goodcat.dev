@@ -93,7 +93,8 @@ Il controllo avviene **una volta per sessione**, anche quando non serve nessun r
 Contano come prima visita solo le richieste che possono essere reindirizzate:
 
 - le richieste non GET, come l'invio di un form, non vengono mai reindirizzate;
-- le route senza traduzioni vengono ignorate, quindi il controllo avviene sulla prima pagina localizzata che l'utente apre.
+- le route senza traduzioni vengono ignorate, quindi il controllo avviene sulla prima pagina localizzata che l'utente apre;
+- i locale senza una [chiave di route localizzata](localized-routes#chiavi-di-route-tradotte) per i model della pagina non vengono considerati come destinazione.
 
 > [!NOTE]
 > Questa funzionalità richiede una sessione, che il gruppo `web` di Laravel fornisce. Se usi i [domini tradotti](localized-routes#traduzione-dei-domini), configura una sessione condivisa tra quei domini.

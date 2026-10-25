@@ -65,10 +65,10 @@ If the route has no translation for the chosen locale, `route()` returns the URL
 
 The examples use the default `prefix_except_default` [strategy](localized-routes#route-strategy): with `prefix`, the canonical URL is `/en/example` instead.
 
-Routes without `lang()` are not affected: `route()` returns their usual URL and ignores `lang`.
+Routes without `lang()` are not affected: `lang` is a regular parameter for them, so it fills a `{lang}` segment or ends up in the query string, as it would without the package.
 
 > [!WARNING]
-> `lang` is reserved for selecting the URL's language. Use a different name for route parameters: URLs containing `{lang}` cannot be generated with `route()` or `action()`.
+> On localized routes, `lang` is reserved for selecting the URL's language. Use a different name for their route parameters: a localized route with a `{lang}` segment cannot be generated with `route()` or `action()`.
 
 ## The action() helper
 
@@ -79,6 +79,32 @@ action(Controller::class); // URL in the current locale
 action(Controller::class, ['lang' => 'es']); // "https://example.com/es/ejemplo"
 action([ProductController::class, 'show'], ['product' => $product, 'lang' => 'es']);
 ```
+
+## Missing localized route keys
+
+When a model has no [localized route key](localized-routes#translated-route-keys) for a locale, `route()` and `action()` fall back to the canonical route, unless the locale is requested explicitly:
+
+```php
+// The post has no Italian slug and the application locale is "it"
+route('posts.show', $post); // "https://example.com/article/hello-world"
+
+route('posts.show', ['post' => $post, 'lang' => 'it']); // Throws MissingLocalizedRouteKeyException
+route('posts.show.it', $post); // Throws MissingLocalizedRouteKeyException
+```
+
+`MissingLocalizedRouteKeyException` extends Laravel's `UrlGenerationException`. Catch it to skip the locale, for example in a sitemap:
+
+```php
+use Goodcat\L10n\Routing\Exceptions\MissingLocalizedRouteKeyException;
+
+try {
+    $url = route('posts.show', ['post' => $post, 'lang' => 'it']);
+} catch (MissingLocalizedRouteKeyException) {
+    // The post has no Italian slug
+}
+```
+
+The canonical route key is always required: when it is missing, `MissingLocalizedRouteKeyException` is thrown for the canonical route as well.
 
 ## Linking to the current page in another language
 

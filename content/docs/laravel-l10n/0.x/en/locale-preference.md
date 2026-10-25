@@ -93,7 +93,8 @@ The check runs **once per session**, even when no redirect is needed. After the 
 Only requests that can be redirected count as the first visit:
 
 - non-GET requests, such as form submissions, are never redirected;
-- routes without translations are ignored, so the check happens on the first localized page the user opens.
+- routes without translations are ignored, so the check happens on the first localized page the user opens;
+- locales without a [localized route key](localized-routes#translated-route-keys) for the page's models are not considered as a destination.
 
 > [!NOTE]
 > This feature requires a session, which Laravel's `web` group provides. When using [translated domains](localized-routes#domain-translations), configure a session shared across those domains.

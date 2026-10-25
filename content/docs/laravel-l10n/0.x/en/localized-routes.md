@@ -203,6 +203,57 @@ return [
 
 The localized route still binds `post` by its slug.
 
+### Translated route keys
+
+If the route key itself is translated, for example a slug stored for each locale, implement the `HasLocalizedRouteKey` contract on the model. When generating a URL for a localized route, the package calls `getLocalizedRouteKey()` with the route's locale and the binding field. This example uses [spatie/laravel-translatable](https://github.com/spatie/laravel-translatable):
+
+```php title="app/Models/Post.php"
+use Goodcat\L10n\Contracts\HasLocalizedRouteKey;
+use Spatie\Translatable\HasTranslations;
+
+class Post extends Model implements HasLocalizedRouteKey
+{
+    use HasTranslations;
+
+    public array $translatable = ['slug'];
+
+    public function getLocalizedRouteKey(string $locale, ?string $field = null): ?string
+    {
+        return $this->getTranslation($field ?? $this->getRouteKeyName(), $locale, false) ?: null;
+    }
+}
+```
+
+```php
+route('posts.show', ['post' => $post, 'lang' => 'it']); // "https://example.com/it/articolo/ciao-mondo"
+```
+
+Return `null` when the model has no translation for a locale. The [locale switcher](components#locale-switcher), the [hreflang links](components#alternate-hreflang-links) and the [preferred locale redirect](locale-preference#redirecting-to-the-preferred-locale) skip that locale. See [Missing localized route keys](url-generation#missing-localized-route-keys) for `route()` and `action()`.
+
+Incoming requests are resolved by the model's own binding. To answer with a 404 when the post has no translation, or when its slug belongs to another locale, look up the slug in the route's locale:
+
+```php title="app/Models/Post.php"
+public function resolveRouteBinding($value, $field = null): ?self
+{
+    $field ??= $this->getRouteKeyName();
+
+    return $this->where("$field->".app()->getLocale(), $value)->first();
+}
+```
+
+To redirect instead, let the binding match the slug of any locale and send the visitor to the right URL:
+
+```php title="app/Http/Controllers/PostController.php"
+public function show(Request $request, Post $post)
+{
+    if ($request->route()->originalParameter('post') !== $post->getLocalizedRouteKey(app()->getLocale())) {
+        return redirect()->route('posts.show', $post, 301);
+    }
+
+    // ...
+}
+```
+
 ### Collisions with no_prefix
 
 Without a locale prefix, two routes can end up with the same URI. With the `no_prefix` strategy, a translation that shares its domain and URI with the canonical route or with an earlier translation is skipped:

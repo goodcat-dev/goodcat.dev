@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
@@ -31,6 +32,16 @@ class CdnCachingTest extends TestCase
         $this->assertSame('max-age=300, public, s-maxage=604800', $response->headers->get('Cache-Control'));
         $this->assertNotNull($response->headers->get('ETag'));
         $this->assertSame([], $response->headers->getCookies());
+    }
+
+    public function test_routes_outside_the_public_group_keep_session_and_csrf(): void
+    {
+        Route::middleware('web')->get('/stateful', fn () => 'ok');
+
+        $cookies = collect($this->get('/stateful')->assertOk()->headers->getCookies())->map->getName();
+
+        $this->assertContains(config('session.cookie'), $cookies);
+        $this->assertContains('XSRF-TOKEN', $cookies);
     }
 
     public function test_purge_clears_the_whole_cloudflare_zone(): void

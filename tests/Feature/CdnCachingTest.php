@@ -27,10 +27,23 @@ class CdnCachingTest extends TestCase
     #[DataProvider('pages')]
     public function test_public_pages_are_cacheable_by_the_cdn(string $uri): void
     {
+        config(['app.http_cache' => true]);
+
         $response = $this->get($uri)->assertOk();
 
         $this->assertSame('max-age=300, public, s-maxage=604800', $response->headers->get('Cache-Control'));
         $this->assertNotNull($response->headers->get('ETag'));
+        $this->assertSame([], $response->headers->getCookies());
+    }
+
+    public function test_pages_are_not_cached_when_http_cache_is_disabled(): void
+    {
+        config(['app.http_cache' => false]);
+
+        $response = $this->get('/blog')->assertOk();
+
+        $this->assertStringContainsString('no-cache', $response->headers->get('Cache-Control'));
+        $this->assertNull($response->headers->get('ETag'));
         $this->assertSame([], $response->headers->getCookies());
     }
 

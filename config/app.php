@@ -56,6 +56,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | HTTP Cache Headers
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, public pages are sent with Cache-Control headers that let
+    | the CDN and the browser cache them. Keep it disabled in development,
+    | so that every request reaches the application and shows changes.
+    |
+    */
+
+    'http_cache' => (bool) env('HTTP_CACHE_ENABLED', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |

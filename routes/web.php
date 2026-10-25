@@ -3,13 +3,14 @@
 use App\Http\Controllers\DocsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
+use App\Http\Middleware\SetHttpCacheHeaders;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 Route::lang(array_keys(config('app.locales')))
-    ->middleware('cache.headers:public;max_age=300;s_maxage=604800;etag')
+    ->middleware(SetHttpCacheHeaders::class.':public;max_age=300;s_maxage=604800;etag')
     ->withoutMiddleware([StartSession::class, ShareErrorsFromSession::class, PreventRequestForgery::class])
     ->group(function () {
         Route::get('/', HomeController::class)->name('home');

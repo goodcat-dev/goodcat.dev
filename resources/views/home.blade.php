@@ -39,11 +39,14 @@
     </section>
 
     <section id="blog" aria-labelledby="blog-heading" class="mx-auto max-w-7xl scroll-mt-6 px-5 pb-30 md:px-8">
-        <x-site.section-label id="blog-heading" class="mb-2">fresh from the blog</x-site.section-label>
+        <div class="mb-2 flex flex-wrap items-baseline justify-between gap-4">
+            <x-site.section-label id="blog-heading">fresh from the blog</x-site.section-label>
+            <a href="{{ route('posts.index') }}" class="font-bold text-accent hover:text-chalk">All posts →</a>
+        </div>
         <div class="flex flex-col">
             @foreach ($posts as $post)
                 <x-site.post-row :post="$post" :dot="$dots[$loop->index % count($dots)]">
-                    {{ $post['published_at']->format('M j, Y') }} · {{ $post['reading_time'] }} min
+                    {{ $post->publishedAt->format('M j, Y') }} · {{ $post->readingTime }} min
                 </x-site.post-row>
             @endforeach
         </div>

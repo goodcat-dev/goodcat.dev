@@ -14,8 +14,19 @@ class SitePagesTest extends TestCase
             ->assertSee('composer require goodcat/laravel-l10n')
             ->assertSee('href="'.route('docs.index', 'laravel-l10n').'"', false)
             ->assertSee('href="https://github.com/goodcat-dev/laravel-filter-querystring"', false)
-            ->assertSee('Translated URLs without a second router')
-            ->assertSee(route('posts.show', 'localized-routes-in-vue'));
+            ->assertSee('Localized routes in Vue without passing lang every time')
+            ->assertSee(route('posts.show', 'localized-routes-in-vue'))
+            ->assertSee('href="'.route('posts.index').'"', false);
+    }
+
+    public function test_blog_archive_lists_every_post_by_year(): void
+    {
+        $this->get(route('posts.index'))
+            ->assertOk()
+            ->assertSee('1 post')
+            ->assertSeeInOrder(['2026', 'Localized routes in Vue without passing lang every time'])
+            ->assertSee(route('posts.show', 'localized-routes-in-vue'))
+            ->assertSee('aria-current="page"', false);
     }
 
     public function test_post_page_renders_the_article_and_its_package(): void
@@ -25,12 +36,42 @@ class SitePagesTest extends TestCase
             ->assertSee('Pick your stack')
             ->assertSee('this article runs on')
             ->assertSee(route('docs.index', 'laravel-l10n'))
-            ->assertSee('Translated URLs without a second router');
+            ->assertSee('font-mono text-[0.8em] font-medium tracking-[-0.04em] text-black squircle">lang</span>', false)
+            ->assertSee('// before you start')
+            ->assertSee('<h2 id="wayfinder">', false)
+            ->assertSee('class="phiki', false)
+            ->assertSee('<title>Localized routes in Vue without passing lang every time · goodcat.dev</title>', false)
+            ->assertDontSee('keep reading');
+    }
+
+    public function test_italian_post_page_renders_the_translation(): void
+    {
+        $this->get('/it/blog/route-localizzate-in-vue')
+            ->assertOk()
+            ->assertSee('Scegli il tuo stack')
+            ->assertSee('// prima di iniziare')
+            ->assertSee('href="/it/docs/laravel-l10n"', false);
+    }
+
+    public function test_post_links_to_its_translation_with_the_translated_slug(): void
+    {
+        $this->get('/blog/localized-routes-in-vue')
+            ->assertSee('<link rel="alternate" hreflang="it" href="'.url('/it/blog/route-localizzate-in-vue').'"', false)
+            ->assertSee('href="'.url('/it/blog/route-localizzate-in-vue').'"', false);
+
+        $this->get('/it/blog/route-localizzate-in-vue')
+            ->assertSee('<link rel="alternate" hreflang="en" href="'.url('/blog/localized-routes-in-vue').'"', false);
     }
 
     public function test_unknown_post_returns_not_found(): void
     {
         $this->get('/blog/missing-post')->assertNotFound();
+    }
+
+    public function test_slug_of_another_locale_returns_not_found(): void
+    {
+        $this->get('/it/blog/localized-routes-in-vue')->assertNotFound();
+        $this->get('/blog/route-localizzate-in-vue')->assertNotFound();
     }
 
     public function test_package_docs_redirect_to_the_current_version(): void

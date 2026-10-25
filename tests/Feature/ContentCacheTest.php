@@ -14,7 +14,7 @@ class ContentCacheTest extends TestCase
         $this->artisan('content:cache')->assertSuccessful();
 
         $this->assertCount(
-            count(File::glob(base_path('content/docs/*/*/*/*.md'))),
+            count(File::glob(base_path('content/docs/*/*/*/*.md'))) + count(File::glob(base_path('content/posts/*/*.md'))),
             File::files(storage_path('framework/content')),
         );
     }

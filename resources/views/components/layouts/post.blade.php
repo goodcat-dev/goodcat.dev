@@ -4,19 +4,27 @@
     $scope = $package ?? ['colors' => []];
 @endphp
 
-<x-layouts.site :title="$post['title']" active="blog" compact-footer>
+<x-layouts.site :title="$post->title" active="blog" compact-footer>
     <x-package-scope :package="$scope">
         <section class="mx-auto max-w-7xl px-5 pt-12 pb-14 md:px-8 md:pt-18">
             <div class="flex flex-wrap items-center gap-2.5">
                 @if ($package)
                     <a href="{{ $package['url'] }}" class="inline-flex -rotate-2 items-center gap-2 rounded-2xl bg-pkg px-4 py-2 text-[15px] font-bold text-pkg-ink squircle hover:text-pkg-ink">{{ $package['name'] }}</a>
                 @endif
-                @foreach ($post['tags'] as $tag)
+                @foreach ($post->tags as $tag)
                     <span class="rounded-full bg-ink-3 px-3 py-1.5 font-mono text-[13px] text-mist">{{ $tag }}</span>
                 @endforeach
             </div>
 
-            <h1 class="mt-8 max-w-[1080px] text-5xl leading-[0.98] font-extrabold tracking-[-0.05em] md:text-[92px]">{{ $title ?? $post['title'] }}</h1>
+            <h1 class="mt-8 max-w-[1080px] text-5xl leading-[0.98] font-extrabold tracking-[-0.05em] md:text-[92px]">
+                @foreach (explode('`', $post->headline) as $part)
+                    @if ($loop->odd)
+                        {{ $part }}
+                    @else
+                        <span class="inline-block -rotate-2 rounded-[32px] bg-acid px-[22px] pb-1.5 font-mono text-[0.8em] font-medium tracking-[-0.04em] text-black squircle">{{ $part }}</span>
+                    @endif
+                @endforeach
+            </h1>
 
             <div class="mt-9 flex flex-wrap items-center gap-3.5 font-mono text-[13px] text-mist">
                 <x-site.blob class="size-9 text-on-brand">
@@ -24,14 +32,14 @@
                 </x-site.blob>
                 <span class="text-chalk">by Matteo</span>
                 <span aria-hidden="true">·</span>
-                <time datetime="{{ $post['published_at']->toDateString() }}">{{ $post['published_at']->format('M j, Y') }}</time>
+                <time datetime="{{ $post->publishedAt->toDateString() }}">{{ $post->publishedAt->format('M j, Y') }}</time>
                 <span aria-hidden="true">·</span>
-                <span>{{ $post['reading_time'] }} min read</span>
+                <span>{{ $post->readingTime }} min read</span>
             </div>
         </section>
 
         <article class="mx-auto max-w-7xl px-5 pb-24 md:px-8">
-            <div class="max-w-[820px] [&_.c]:text-slate [&_.f]:text-cyan [&_.k]:text-pink [&_.p]:text-peach [&_.s]:text-acid [&_.t]:text-sun [&_:not(pre)>code]:rounded-lg [&_:not(pre)>code]:bg-ink-4 [&_:not(pre)>code]:px-[7px] [&_:not(pre)>code]:py-0.5 [&_:not(pre)>code]:font-mono [&_:not(pre)>code]:text-[.84em] [&_:not(pre)>code]:text-chalk [&_h2]:mt-14 [&_h2]:scroll-mt-24 [&_h2]:text-[40px] [&_h2]:leading-none [&_h2]:font-extrabold [&_h2]:tracking-[-0.045em] md:[&_h2]:text-[56px] [&_p]:mt-[22px] [&_p]:text-[19px] [&_p]:leading-[1.75] [&_p]:text-fog [&_p_a]:font-bold [&_p_a]:text-pkg-text [&_p_a]:hover:text-accent">
+            <div class="article max-w-[820px]">
                 {{ $slot }}
             </div>
         </article>

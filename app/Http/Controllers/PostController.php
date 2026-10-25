@@ -3,29 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Content\Docs;
-use App\Support\SamplePosts;
+use App\Content\Post;
+use App\Content\Posts;
 use Illuminate\View\View;
 
 class PostController extends Controller
 {
-    public function show(Docs $docs, string $slug): View
+    public function index(Posts $posts): View
     {
-        $posts = SamplePosts::all()->values();
-        $index = $posts->search(fn (array $post) => $post['slug'] === $slug);
+        return view('posts.index', [
+            'years' => $posts->all(app()->getLocale())->groupBy(fn (Post $post) => $post->publishedAt->year),
+        ]);
+    }
 
-        abort_if($index === false || ! view()->exists("posts.samples.{$slug}"), 404);
+    public function show(Docs $docs, Posts $posts, Post $post): View
+    {
+        $all = $posts->all(app()->getLocale());
+        $index = $all->search(fn (Post $candidate) => $candidate->key === $post->key);
 
-        $post = $posts[$index];
-
-        return view("posts.samples.{$slug}", [
+        return view('posts.show', [
             'post' => $post,
-            'package' => $post['package'] ? [
-                ...config("packages.{$post['package']}"),
-                'slug' => $post['package'],
-                'url' => $docs->url($post['package']) ?? config("packages.{$post['package']}.repository"),
+            'package' => $post->package ? [
+                ...config("packages.{$post->package}"),
+                'slug' => $post->package,
+                'url' => $docs->url($post->package) ?? config("packages.{$post->package}.repository"),
             ] : null,
-            'previous' => $posts->get($index + 1),
-            'next' => $posts->get($index - 1),
+            'previous' => $all->get($index + 1),
+            'next' => $all->get($index - 1),
         ]);
     }
 }

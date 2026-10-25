@@ -2,7 +2,7 @@
 
 @php
     $items = [
-        'blog' => ['label' => 'Blog', 'href' => route('home').'#blog'],
+        'blog' => ['label' => 'Blog', 'href' => route('posts.index')],
         'packages' => ['label' => 'Packages', 'href' => route('home').'#packages'],
         'about' => ['label' => 'About', 'href' => route('home').'#about'],
     ];

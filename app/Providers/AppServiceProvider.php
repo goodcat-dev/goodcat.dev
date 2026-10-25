@@ -5,7 +5,9 @@ namespace App\Providers;
 use App\Content\ContentCompiler;
 use App\Content\Docs;
 use App\Content\Markdown\MarkdownRenderer;
+use App\Content\Posts;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,6 +28,12 @@ class AppServiceProvider extends ServiceProvider
             $app->make(ContentCompiler::class),
             base_path('content/docs'),
         ));
+
+        $this->app->singleton(Posts::class, fn ($app) => new Posts(
+            $app->make(Filesystem::class),
+            $app->make(ContentCompiler::class),
+            base_path('content/posts'),
+        ));
     }
 
     /**
@@ -33,6 +41,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Route::bind('post', fn (string $slug) => $this->app->make(Posts::class)->findBySlug($slug, $this->app->getLocale()) ?? abort(404));
+
         $this->optimizes(optimize: 'content:cache', clear: 'content:clear', key: 'content');
     }
 }

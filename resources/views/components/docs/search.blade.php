@@ -41,7 +41,7 @@
             <button type="button" x-on:click="close" class="cursor-pointer rounded-full bg-line px-2.5 py-1 font-mono text-xs text-fog">Esc</button>
         </div>
 
-        <ul x-ref="results" role="listbox" aria-label="{{ __('Results') }}" class="max-h-[60vh] overflow-y-auto p-2 [&_mark]:bg-transparent [&_mark]:text-pkg-text">
+        <ul x-ref="results" x-show="hits.length > 0" x-cloak role="listbox" aria-label="{{ __('Results') }}" class="max-h-[60vh] overflow-y-auto p-2 [&_mark]:bg-transparent [&_mark]:text-pkg-text">
             <template x-for="(hit, index) in hits" x-bind:key="hit.url">
                 <li role="option" x-bind:aria-selected="active === index">
                     <a

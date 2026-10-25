@@ -36,7 +36,7 @@ class SitePagesTest extends TestCase
             ->assertSee('Pick your stack')
             ->assertSee('this article runs on')
             ->assertSee(route('docs.index', 'laravel-l10n'))
-            ->assertSee('font-mono text-[0.8em] font-medium tracking-[-0.04em] text-black squircle">lang</span>', false)
+            ->assertSee('font-mono text-[0.8em] font-medium tracking-[-0.04em] text-on-accent squircle">lang</span>', false)
             ->assertSee('// before you start')
             ->assertSee('<h2 id="wayfinder">', false)
             ->assertSee('class="phiki', false)

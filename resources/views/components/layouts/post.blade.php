@@ -21,7 +21,7 @@
                     @if ($loop->odd)
                         {{ $part }}
                     @else
-                        <span class="inline-block -rotate-2 rounded-[32px] bg-acid px-[22px] pb-1.5 font-mono text-[0.8em] font-medium tracking-[-0.04em] text-black squircle">{{ $part }}</span>
+                        <span class="inline-block -rotate-2 rounded-[32px] bg-acid px-[22px] pb-1.5 font-mono text-[0.8em] font-medium tracking-[-0.04em] text-on-accent squircle">{{ $part }}</span>
                     @endif
                 @endforeach
             </h1>

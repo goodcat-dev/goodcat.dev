@@ -28,7 +28,6 @@ class AppServiceProvider extends ServiceProvider
                 resource_path('views/components/code-tabs.blade.php'),
                 resource_path('views/components/code-tabs'),
                 resource_path('views/components/copy-button.blade.php'),
-                resource_path('phiki'),
                 lang_path(),
                 base_path('composer.lock'),
             ],

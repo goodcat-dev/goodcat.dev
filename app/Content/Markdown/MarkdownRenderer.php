@@ -38,8 +38,7 @@ class MarkdownRenderer
             'table' => ['wrap' => ['enabled' => true, 'tag' => 'div', 'attributes' => ['class' => 'table-wrap']]],
         ]);
 
-        $phiki = (new Phiki)->theme('goodcat', resource_path('phiki/goodcat.json'));
-        $codeRenderer = new FencedCodeRenderer($phiki, 'goodcat');
+        $codeRenderer = new FencedCodeRenderer(new Phiki, ['dark' => 'catppuccin-mocha', 'light' => 'catppuccin-latte']);
 
         $environment
             ->addExtension(new CommonMarkCoreExtension)

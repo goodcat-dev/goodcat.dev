@@ -8,7 +8,7 @@
     $featureStyles = [
         ['card' => 'bg-pkg text-pkg-ink hover:text-pkg-ink', 'icon' => '', 'text' => '', 'path' => 'M4.5 12a7.5 7.5 0 0 0 15 0m-15 0a7.5 7.5 0 1 1 15 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077 1.41-.513m14.095-5.13 1.41-.513M5.106 17.785l1.15-.964m11.49-9.642 1.149-.964M7.501 19.795l.75-1.3m7.5-12.99.75-1.3m-6.063 16.658.26-1.477m2.605-14.772.26-1.477m0 17.726-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205 12 12m6.894 5.785-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495'],
         ['card' => 'bg-ink-2 shadow-[inset_0_0_0_2px_var(--pkg-main)] hover:text-chalk', 'icon' => 'text-pkg-text', 'text' => 'text-fog', 'path' => 'M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z'],
-        ['card' => 'bg-pkg-light text-black hover:text-black light:shadow-[inset_0_0_0_2px_var(--pkg-main)]', 'icon' => '', 'text' => '', 'path' => 'M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z'],
+        ['card' => 'bg-pkg-light text-pkg-ink hover:text-pkg-ink light:shadow-[inset_0_0_0_2px_var(--pkg-main)]', 'icon' => '', 'text' => '', 'path' => 'M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z'],
     ];
 @endphp
 
@@ -21,7 +21,7 @@
                 <p class="mt-[22px] max-w-[640px] text-[21px] leading-normal">{{ $page->description }}</p>
             @endif
             <div class="mt-8 flex flex-wrap gap-3">
-                <a href="{{ $pageUrl('quickstart') }}" class="inline-flex h-[50px] items-center gap-2.5 rounded-full bg-black px-6 text-[17px] font-bold text-zinc-100 hover:text-zinc-100">{{ $titles['quickstart'] ?? 'Quickstart' }} {!! $arrow !!}</a>
+                <a href="{{ $pageUrl('quickstart') }}" class="inline-flex h-[50px] items-center gap-2.5 rounded-full bg-pkg-ink px-6 text-[17px] font-bold text-pkg-light hover:text-pkg-light">{{ $titles['quickstart'] ?? 'Quickstart' }} {!! $arrow !!}</a>
                 <a href="{{ $package['repository'] }}" class="inline-flex h-[50px] items-center rounded-full px-6 text-[17px] font-bold text-pkg-ink shadow-[inset_0_0_0_2px_var(--pkg-ink)] hover:text-pkg-ink">{{ __('View on GitHub') }}</a>
             </div>
         </section>
@@ -32,7 +32,7 @@
             @endif
             <h1 class="mt-3 text-5xl leading-[0.95] font-extrabold tracking-[-0.05em] md:text-[72px]">{{ $page->title }}</h1>
             @if ($page->description)
-                <p class="mt-5 max-w-[680px] text-[21px] leading-normal text-zinc-200 light:text-zinc-800">{{ $page->description }}</p>
+                <p class="mt-5 max-w-[680px] text-[21px] leading-normal text-chalk">{{ $page->description }}</p>
             @endif
         </header>
     @endif

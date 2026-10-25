@@ -10,33 +10,35 @@
     --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 
     --color-white: #ffffff;
-    --color-black: #0e0e11;
-    --color-ink: #0e0e11;
-    --color-ink-2: #16161b;
-    --color-ink-3: #1b1b20;
-    --color-ink-4: #1f1f26;
-    --color-line: #26262d;
-    --color-mist: #9b9ba6;
-    --color-fog: #c4c4cc;
-    --color-chalk: #f4f4f5;
-    --color-acid: #dbff75;
-    --color-grape: #6d4aff;
-    --color-grape-text: #b3a1ff;
-    --color-mint: #36b49f;
-    --color-mint-ink: #0b2a24;
-    --color-mint-text: #6fe0c9;
-    --color-tangerine: #ff6b2c;
-    --color-tangerine-ink: #2b1006;
-    --color-tangerine-text: #ff6b2c;
-    --color-cobalt: #2f7bff;
-    --color-cyan: #7ee7f2;
-    --color-pink: #ff8ad8;
-    --color-peach: #ffb38a;
-    --color-sun: #ffd166;
-    --color-slate: #6b6b76;
-    --color-accent: #dbff75;
-    --color-brand: #dbff75;
-    --color-on-brand: #0e0e11;
+    --color-ink: #1e1e2e;
+    --color-ink-2: #181825;
+    --color-ink-3: #313244;
+    --color-ink-4: #45475a;
+    --color-line: #313244;
+    --color-mist: #a6adc8;
+    --color-fog: #bac2de;
+    --color-chalk: #cdd6f4;
+    --color-overlay: #9399b2;
+    --color-on-accent: #11111b;
+    --color-acid: #9efe7c;
+    --color-grape: #b76dff;
+    --color-grape-ink: #20142d;
+    --color-grape-text: #c699f8;
+    --color-mint: #02beac;
+    --color-mint-ink: #072a26;
+    --color-mint-text: #69dfce;
+    --color-tangerine: #fa7c20;
+    --color-tangerine-ink: #2c1204;
+    --color-tangerine-text: #fe9b61;
+    --color-cobalt: #5d94ff;
+    --color-cyan: #6ee5f9;
+    --color-pink: #fa8cd7;
+    --color-peach: #f996a7;
+    --color-sun: #ffd162;
+    --color-slate: #9399b2;
+    --color-accent: #9efe7c;
+    --color-brand: #9efe7c;
+    --color-on-brand: #11111b;
 
     --animate-page-out: page-out 150ms ease-in both;
     --animate-page-in: page-in 300ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
@@ -75,32 +77,23 @@
         --pkg-text: var(--color-mint-text);
     }
 
-    [data-theme='dark'] {
-        --color-ink: #0e0e11;
-        --color-ink-2: #16161b;
-        --color-ink-3: #1b1b20;
-        --color-ink-4: #1f1f26;
-        --color-line: #26262d;
-        --color-mist: #9b9ba6;
-        --color-fog: #c4c4cc;
-        --color-chalk: #f4f4f5;
-    }
-
     [data-theme='light'] {
-        --color-ink: #f7f7f4;
-        --color-ink-2: #ffffff;
-        --color-ink-3: #ecece7;
-        --color-ink-4: #e4e4de;
-        --color-line: #dadad3;
-        --color-mist: #696973;
-        --color-fog: #3a3a42;
-        --color-chalk: #0e0e11;
-        --color-mint-text: #0f7a68;
-        --color-grape-text: #5a36f0;
-        --color-tangerine-text: #b8430f;
-        --color-accent: #6d4aff;
-        --color-brand: #0e0e11;
-        --color-on-brand: #dbff75;
+        --color-ink: #eff1f5;
+        --color-ink-2: #e6e9ef;
+        --color-ink-3: #dce0e8;
+        --color-ink-4: #ccd0da;
+        --color-line: #ccd0da;
+        --color-mist: #5c5f77;
+        --color-fog: color-mix(in srgb, #4c4f69 50%, #5c5f77);
+        --color-chalk: #4c4f69;
+        --color-overlay: #7c7f93;
+        --color-grape-text: #822cc4;
+        --color-mint-text: #057368;
+        --color-tangerine-text: #ab4b01;
+        --color-slate: #7c7f93;
+        --color-accent: #822cc4;
+        --color-brand: #1e1e2e;
+        --color-on-brand: #9efe7c;
     }
 
     html {
@@ -112,7 +105,7 @@
     }
 
     ::selection {
-        @apply bg-acid text-black;
+        @apply bg-overlay/30;
     }
 
     :focus-visible {
@@ -139,6 +132,17 @@
 }
 
 @layer components {
+    .phiki {
+        background-color: transparent !important;
+    }
+
+    [data-theme='light'] :is(.phiki-themes, .phiki-themes .token) {
+        color: var(--phiki-light-color) !important;
+        font-style: var(--phiki-light-font-style, normal) !important;
+        font-weight: var(--phiki-light-font-weight, inherit) !important;
+        text-decoration: var(--phiki-light-text-decoration, none) !important;
+    }
+
     .markdown {
         & > :first-child {
             @apply mt-0;
@@ -165,7 +169,7 @@
         }
 
         & strong {
-            @apply font-bold text-white light:text-chalk;
+            @apply font-bold text-chalk;
         }
 
         & :not(pre) > code {
@@ -211,7 +215,7 @@
 
     .article {
         & > p:first-child {
-            @apply mt-0 text-[23px] leading-[1.6] text-zinc-200 light:text-zinc-800;
+            @apply mt-0 text-[23px] leading-[1.6] text-chalk;
         }
 
         & h2 {
@@ -231,7 +235,7 @@
         }
 
         & strong {
-            @apply font-bold text-white light:text-chalk;
+            @apply font-bold text-chalk;
         }
 
         & :not(pre) > code {

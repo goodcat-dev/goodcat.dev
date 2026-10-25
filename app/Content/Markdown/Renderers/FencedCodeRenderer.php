@@ -12,7 +12,10 @@ use Phiki\Phiki;
 
 class FencedCodeRenderer implements NodeRendererInterface
 {
-    public function __construct(private Phiki $phiki, private string $theme) {}
+    /**
+     * @param  array<string, string>  $themes
+     */
+    public function __construct(private Phiki $phiki, private array $themes) {}
 
     public function render(Node $node, ChildNodeRendererInterface $childRenderer): string
     {
@@ -36,7 +39,7 @@ class FencedCodeRenderer implements NodeRendererInterface
         return [
             'title' => $title[1] ?? null,
             'language' => $language !== '' ? $language : null,
-            'html' => $this->phiki->codeToHtml(rtrim($node->getLiteral(), "\n"), $grammar, $this->theme)->toString(),
+            'html' => $this->phiki->codeToHtml(rtrim($node->getLiteral(), "\n"), $grammar, $this->themes)->toString(),
         ];
     }
 }

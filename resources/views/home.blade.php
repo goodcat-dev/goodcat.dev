@@ -1,6 +1,6 @@
 @php
     $stickers = [
-        'Design' => '-rotate-3 rounded-full bg-grape text-white',
+        'Design' => '-rotate-3 rounded-full bg-grape text-grape-ink',
         'Code' => 'squircle rotate-2 rounded-[42px] bg-mint text-mint-ink',
         'Repeat' => '-rotate-[1.5deg] rounded-[999px_999px_999px_24px] bg-tangerine text-tangerine-ink',
     ];

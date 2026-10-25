@@ -82,7 +82,7 @@
             </span>
         </div>
         <span x-show="voted" x-cloak class="inline-flex items-center gap-2.5 text-base text-fog" role="status">
-            <x-site.cat-mark :stroke-width="5" class="size-6 text-pkg-text" />
+            <x-site.cat-mark :stroke-width="4" class="size-6 text-pkg-text" />
             {{ __('Thanks for your feedback!') }}
         </span>
     </div>

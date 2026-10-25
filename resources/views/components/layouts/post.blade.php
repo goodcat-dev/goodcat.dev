@@ -20,7 +20,7 @@
 
             <div class="mt-9 flex flex-wrap items-center gap-3.5 font-mono text-[13px] text-mist">
                 <x-site.blob class="size-9 text-ink">
-                    <x-site.cat-mark :stroke-width="5" class="size-7" />
+                    <x-site.cat-mark :stroke-width="4" class="size-7" />
                 </x-site.blob>
                 <span class="text-chalk">by Matteo</span>
                 <span aria-hidden="true">·</span>

@@ -58,7 +58,7 @@
                     <nav aria-label="{{ __('Footer') }}" class="flex items-center gap-5">
                         <a href="{{ route('home') }}" aria-label="goodcat.dev" title="goodcat.dev" class="transition-transform hover:-rotate-6">
                             <x-site.blob class="size-8 text-ink">
-                                <x-site.cat-mark :stroke-width="5.5" class="size-6" />
+                                <x-site.cat-mark :stroke-width="4.4" class="size-6" />
                             </x-site.blob>
                         </a>
                         <a href="{{ $package['repository'] }}" class="hover:text-acid">GitHub</a>

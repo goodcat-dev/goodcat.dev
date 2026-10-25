@@ -2,6 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Content\ContentCompiler;
+use App\Content\Markdown\MarkdownRenderer;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 use Tests\TestCase;
 
@@ -37,6 +40,42 @@ class ContentCacheTest extends TestCase
         $compiled->each(fn (string $path) => $this->assertSame($marker, filemtime($path), "{$path} was compiled again."));
 
         $this->artisan('content:clear')->assertSuccessful();
+    }
+
+    public function test_content_is_recompiled_when_a_renderer_dependency_changes(): void
+    {
+        $directory = storage_path('framework/testing/content-version');
+        File::ensureDirectoryExists($directory);
+        File::put("{$directory}/page.md", "# Title\n");
+        File::put("{$directory}/view.blade.php", 'v1');
+
+        $compiler = fn () => new ContentCompiler(new Filesystem, app(MarkdownRenderer::class), "{$directory}/compiled", ["{$directory}/view.blade.php"]);
+
+        $compiler()->get("{$directory}/page.md", 'en');
+        $this->assertCount(1, File::files("{$directory}/compiled"));
+
+        touch("{$directory}/view.blade.php", time() + 60);
+        clearstatcache();
+
+        $updated = $compiler();
+        $updated->get("{$directory}/page.md", 'en');
+        $this->assertCount(2, File::files("{$directory}/compiled"));
+
+        $updated->prune(["{$directory}/page.md"]);
+        $this->assertCount(1, File::files("{$directory}/compiled"));
+
+        File::deleteDirectory($directory);
+    }
+
+    public function test_content_cache_removes_outdated_compiled_files(): void
+    {
+        File::ensureDirectoryExists(storage_path('framework/content'));
+        File::put($orphan = storage_path('framework/content/'.str_repeat('a', 32).'.php'), '<?php return [];');
+
+        $this->artisan('content:cache')->assertSuccessful();
+
+        $this->assertFileDoesNotExist($orphan);
+        $this->assertFileExists(storage_path('framework/content/posts.php'));
     }
 
     public function test_content_clear_removes_compiled_files(): void

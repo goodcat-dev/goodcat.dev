@@ -21,6 +21,17 @@ class AppServiceProvider extends ServiceProvider
             $app->make(Filesystem::class),
             $app->make(MarkdownRenderer::class),
             storage_path('framework/content'),
+            [
+                app_path('Content/Markdown'),
+                resource_path('views/markdown'),
+                resource_path('views/components/code-block.blade.php'),
+                resource_path('views/components/code-tabs.blade.php'),
+                resource_path('views/components/code-tabs'),
+                resource_path('views/components/copy-button.blade.php'),
+                resource_path('phiki'),
+                lang_path(),
+                base_path('composer.lock'),
+            ],
         ));
 
         $this->app->singleton(Docs::class, fn ($app) => new Docs(

@@ -9,6 +9,7 @@
     run_composer
     run_node
     optimize_laravel
+    purge_cdn
 @endstory
 
 @task('pull_repository')
@@ -45,3 +46,8 @@
     php artisan optimize
 @endtask
 
+@task('purge_cdn')
+    echo 'Purge CDN cache'
+    cd {{ $app_dir }}
+    php artisan cdn:purge
+@endtask

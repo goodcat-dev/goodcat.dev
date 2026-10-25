@@ -5,7 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
-Route::lang(array_keys(config('app.locales')))->group(function () {
+Route::lang(array_keys(config('app.locales')))->middleware('cache.headers:public;max_age=300;s_maxage=604800;etag')->group(function () {
     Route::get('/', HomeController::class)->name('home');
 
     Route::get('/blog', [PostController::class, 'index'])->name('posts.index');

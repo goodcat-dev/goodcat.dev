@@ -6,7 +6,7 @@
 <x-layouts.site title="Blog" active="blog">
     <section class="mx-auto max-w-7xl px-5 pt-12 pb-14 md:px-8 md:pt-18">
         <h1 class="text-[64px] leading-[0.95] font-extrabold tracking-[-0.05em] md:text-[120px]">Blog</h1>
-        <p class="mt-6 font-mono text-[13px] text-mist">{{ $count }} {{ Str::plural('post', $count) }}</p>
+        <p class="mt-6 font-mono text-[13px] text-mist">{{ trans_choice(':count post|:count posts', $count) }}</p>
     </section>
 
     @foreach ($years as $year => $posts)
@@ -15,7 +15,7 @@
             <div class="flex flex-col">
                 @foreach ($posts as $post)
                     <x-site.post-row :post="$post" :dot="$dots[$loop->index % count($dots)]">
-                        {{ $post->published_at->format('M j') }} · {{ $post->reading_time }} min
+                        {{ $post->published_at->translatedFormat(__('M j')) }} · {{ __(':minutes min', ['minutes' => $post->reading_time]) }}
                     </x-site.post-row>
                 @endforeach
             </div>

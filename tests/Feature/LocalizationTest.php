@@ -27,6 +27,32 @@ class LocalizationTest extends TestCase
             ->assertSee('href="'.url('/blog/localized-routes-in-vue').'"', false);
     }
 
+    public function test_english_home_renders_english_prose_and_dates(): void
+    {
+        $this->get('/')
+            ->assertSee('I love designing solutions')
+            ->assertSee('I follow the KISS philosophy')
+            ->assertSee('Start reading')
+            ->assertSee('Oct 2, 2026');
+    }
+
+    public function test_italian_home_renders_localized_prose_and_dates(): void
+    {
+        $this->get('/it')
+            ->assertSee('Mi piace progettare soluzioni')
+            ->assertSee('Seguo la filosofia KISS')
+            ->assertSee('Inizia a leggere')
+            ->assertSee('2 ott 2026')
+            ->assertSee('Route localizzate, URI e domini tradotti')
+            ->assertDontSee('I follow the KISS philosophy');
+    }
+
+    public function test_blog_archive_counts_posts_in_the_current_language(): void
+    {
+        $this->get('/blog')->assertSee('1 post');
+        $this->get('/it/blog')->assertSee('1 articolo');
+    }
+
     public function test_italian_docs_are_served_with_translated_content_and_interface(): void
     {
         $this->get('/it/docs/laravel-l10n')

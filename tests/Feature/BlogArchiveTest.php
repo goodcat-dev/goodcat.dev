@@ -61,6 +61,6 @@ class BlogArchiveTest extends TestCase
         Post::factory()->onlyIn('it')->create(['headline' => ['it' => 'Solo in italiano'], 'published_at' => now()]);
 
         $this->get(route('posts.index'))->assertSee('25 posts')->assertDontSee('Solo in italiano');
-        $this->get('/it/blog')->assertSee('26 posts')->assertSee('Solo in italiano');
+        $this->get('/it/blog')->assertSee('26 articoli')->assertSee('Solo in italiano');
     }
 }

@@ -17,7 +17,7 @@
             :class="Arr::toCssClasses(['size-14' => $package['featured'], 'size-12 text-pkg-light' => ! $package['featured']])"
         />
         @if ($package['badge'])
-            <span class="rounded-full bg-pkg-ink/12 px-3 py-1.5 font-mono text-[13px]">{{ $package['badge'] }}</span>
+            <span class="rounded-full bg-pkg-ink/12 px-3 py-1.5 font-mono text-[13px]">{{ __($package['badge']) }}</span>
         @endif
     </span>
     <span>
@@ -26,7 +26,7 @@
         @else
             <span class="block text-[34px] leading-[1.05] font-extrabold tracking-[-0.03em]">{!! Str::replaceFirst('-', '-<br>', e($package['name'])) !!}</span>
         @endif
-        <span @class(['mt-3 block max-w-[520px] leading-normal', 'text-[19px]' => $package['featured'], 'text-[17px]' => ! $package['featured']])>{{ $package['description'] }}</span>
+        <span @class(['mt-3 block max-w-[520px] leading-normal', 'text-[19px]' => $package['featured'], 'text-[17px]' => ! $package['featured']])>{{ __($package['description']) }}</span>
         @if ($package['featured'])
             <code class="mt-5 inline-block rounded-[18px] bg-pkg-ink px-4 py-2.5 font-mono text-sm text-pkg-light squircle">composer require goodcat/{{ $slug }}</code>
         @endif

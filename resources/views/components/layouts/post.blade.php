@@ -30,11 +30,11 @@
                 <x-site.blob class="size-9 text-on-brand">
                     <x-site.cat-mark :stroke-width="4" class="size-7" />
                 </x-site.blob>
-                <span class="text-chalk">by Matteo</span>
+                <span class="text-chalk">{{ __('by Matteo') }}</span>
                 <span aria-hidden="true">·</span>
-                <time datetime="{{ $post->published_at->toDateString() }}">{{ $post->published_at->format('M j, Y') }}</time>
+                <time datetime="{{ $post->published_at->toDateString() }}">{{ $post->published_at->translatedFormat(__('M j, Y')) }}</time>
                 <span aria-hidden="true">·</span>
-                <span>{{ $post->reading_time }} min read</span>
+                <span>{{ __(':minutes min read', ['minutes' => $post->reading_time]) }}</span>
             </div>
         </section>
 
@@ -50,7 +50,7 @@
                     <div class="flex-[1_1_480px]">
                         <span class="rounded-full bg-pkg-ink/12 px-3 py-1.5 font-mono text-[13px]">this article runs on</span>
                         <div class="mt-5 text-5xl leading-none font-extrabold tracking-[-0.045em] md:text-[64px]">{{ $package['name'] }}</div>
-                        <p class="mt-3.5 max-w-[560px] text-[19px] leading-normal">{{ $package['description'] }}</p>
+                        <p class="mt-3.5 max-w-[560px] text-[19px] leading-normal">{{ __($package['description']) }}</p>
                         <code class="mt-5 inline-block rounded-[18px] bg-pkg-ink px-4 py-2.5 font-mono text-sm text-pkg-light squircle">composer require goodcat/{{ $package['slug'] }}</code>
                     </div>
                     <div class="flex flex-wrap gap-3">
@@ -65,10 +65,10 @@
             <section aria-labelledby="keep-reading" class="mx-auto max-w-7xl px-5 pb-30 md:px-8">
                 <x-site.section-label id="keep-reading" class="mb-2">keep reading</x-site.section-label>
                 @if ($previous)
-                    <x-site.post-row :post="$previous" dot="fill-mint">← previous</x-site.post-row>
+                    <x-site.post-row :post="$previous" dot="fill-mint">← {{ __('previous') }}</x-site.post-row>
                 @endif
                 @if ($next)
-                    <x-site.post-row :post="$next" dot="fill-grape">next →</x-site.post-row>
+                    <x-site.post-row :post="$next" dot="fill-grape">{{ __('next') }} →</x-site.post-row>
                 @endif
             </section>
         @endif

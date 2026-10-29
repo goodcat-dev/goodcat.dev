@@ -27,8 +27,8 @@
         <x-copy-button class="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 focus-visible:opacity-100" />
     @endif
     @if ($highlighted)
-        <div class="[&_pre]:overflow-x-auto [&_pre]:px-[26px] [&_pre]:py-[22px] [&_pre]:font-mono [&_pre]:text-sm [&_pre]:leading-[1.75]">{{ $slot }}</div>
+        <div class="[&_pre]:overflow-x-auto [&_pre]:px-5 [&_pre]:py-[22px] md:[&_pre]:px-[26px] [&_pre]:font-mono [&_pre]:text-sm [&_pre]:leading-[1.75]">{{ $slot }}</div>
     @else
-        <pre class="overflow-x-auto px-[26px] py-[22px] font-mono text-sm leading-[1.75] text-chalk">{{ $slot }}</pre>
+        <pre class="overflow-x-auto px-5 py-[22px] font-mono text-sm leading-[1.75] text-chalk md:px-[26px]">{{ $slot }}</pre>
     @endif
 </figure>

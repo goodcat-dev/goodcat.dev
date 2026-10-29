@@ -24,7 +24,7 @@ class MarkdownDirectivesTest extends TestCase
             After the tabs.
             MD)['html'];
 
-        $this->assertStringContainsString('<span id="tabs-pick-your-stack" class="text-base font-bold">Pick your stack</span>', $html);
+        $this->assertStringContainsString('<span id="tabs-pick-your-stack" class="text-base font-bold max-sm:sr-only">Pick your stack</span>', $html);
         $this->assertStringContainsString('x-data="tabs(\'ziggy\')"', $html);
         $this->assertMatchesRegularExpression('/<section id="panel-ziggy"[^>]*>\s*<h2 id="ziggy">Ziggy<\/h2>\s*<p>Ziggy content.<\/p>\s*<\/section>/', $html);
         $this->assertMatchesRegularExpression('/<section id="panel-wayfinder"[^>]*x-cloak[^>]*>\s*<h2 id="wayfinder">Wayfinder<\/h2>/', $html);

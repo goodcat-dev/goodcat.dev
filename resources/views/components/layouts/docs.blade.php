@@ -1,10 +1,10 @@
-@props(['package', 'version', 'current', 'navigation', 'toc' => [], 'versions' => [], 'title' => null])
+@props(['package', 'version', 'current', 'navigation', 'toc' => [], 'versions' => [], 'title' => null, 'description' => null])
 
 @php
     $pageTitle = $title ? "{$title} · {$package['name']}" : $package['name'];
 @endphp
 
-<x-layouts.base :title="$pageTitle">
+<x-layouts.base :title="$pageTitle" :description="$description">
     <x-package-scope :package="$package" x-data="disclosure" x-on:keydown.escape.window="open = false" class="min-h-screen">
         <svg class="absolute size-0" aria-hidden="true"><defs><radialGradient id="docs-mark" cx="0" cy="1" r="1.414"><stop offset="0" class="[stop-color:var(--pkg-main)]" /><stop offset="0.55" class="[stop-color:var(--pkg-main)]" /><stop offset="1" class="[stop-color:var(--pkg-light)]" /></radialGradient></defs></svg>
 

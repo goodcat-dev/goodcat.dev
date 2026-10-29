@@ -4,7 +4,7 @@
     $scope = $package ?? ['colors' => []];
 @endphp
 
-<x-layouts.site :title="$post->title" active="blog" compact-footer>
+<x-layouts.site :title="$post->title" :description="$post->getTranslation('description', app()->getLocale(), false)" active="blog" compact-footer>
     <x-package-scope :package="$scope">
         <section class="mx-auto max-w-7xl px-5 pt-12 pb-14 md:px-8 md:pt-18">
             <div class="flex flex-wrap items-center gap-2.5">

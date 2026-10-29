@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Post;
 use Tests\SyncsPosts;
 use Tests\TestCase;
 
@@ -64,6 +65,27 @@ class SitePagesTest extends TestCase
 
         $this->get('/it/blog/route-localizzate-in-vue')
             ->assertSee('<link rel="alternate" hreflang="en" href="'.url('/blog/localized-routes-in-vue').'"', false);
+    }
+
+    public function test_posts_and_docs_pages_have_a_meta_description(): void
+    {
+        $this->get('/blog/localized-routes-in-vue')
+            ->assertSee('<meta name="description" content="Build a Vue composable', false);
+
+        $this->get('/it/blog/route-localizzate-in-vue')
+            ->assertSee('<meta name="description" content="Un composable Vue', false);
+
+        $this->get(route('docs.show', ['laravel-l10n', '0.x', 'quickstart']))
+            ->assertSee('<meta name="description" content="', false);
+    }
+
+    public function test_post_description_does_not_fall_back_to_another_language(): void
+    {
+        $post = Post::factory()->create(['description' => ['en' => 'English only description']]);
+
+        $this->get(url("/it/blog/{$post->getTranslation('slug', 'it')}"))
+            ->assertOk()
+            ->assertDontSee('<meta name="description"', false);
     }
 
     public function test_unknown_post_returns_not_found(): void

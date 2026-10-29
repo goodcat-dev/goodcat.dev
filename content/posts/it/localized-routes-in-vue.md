@@ -1,5 +1,6 @@
 ---
 title: 'Route localizzate in Vue senza passare `lang` ogni volta'
+description: 'Un composable Vue che legge la lingua dalle props di Inertia, così laravel-l10n sceglie la route localizzata anche in SSR.'
 published_at: 2026-10-02
 package: laravel-l10n
 slug: route-localizzate-in-vue

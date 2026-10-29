@@ -1,5 +1,6 @@
 ---
 title: 'Localized routes in Vue without passing `lang` every time'
+description: 'Build a Vue composable that reads the locale from Inertia’s page props, so laravel-l10n picks localized routes during SSR too.'
 published_at: 2026-10-02
 package: laravel-l10n
 tags: [vue, inertia, ssr]

@@ -82,7 +82,7 @@ class ContentCompiler
         return $this->cachePath.'/'.hash('xxh128', $path.'|'.$this->version()).'.php';
     }
 
-    private function version(): string
+    public function version(): string
     {
         return $this->version ??= hash('xxh128', collect($this->dependencies)
             ->flatMap(fn (string $path) => $this->files->isDirectory($path)

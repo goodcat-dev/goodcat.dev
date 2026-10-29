@@ -99,6 +99,20 @@ class PostsContentTest extends TestCase
         $this->assertTrue($posts->isStale());
     }
 
+    public function test_posts_are_stale_when_the_renderer_changes(): void
+    {
+        $this->writePost('en', 'first-post', "title: First\npublished_at: 2026-01-10");
+        File::put("{$this->directory}/view.blade.php", 'v1');
+        $this->posts()->sync();
+
+        $this->assertFalse($this->posts()->isStale());
+
+        touch("{$this->directory}/view.blade.php", time() + 60);
+        clearstatcache();
+
+        $this->assertTrue($this->posts()->isStale());
+    }
+
     private function writePost(string $locale, string $key, string $frontMatter): void
     {
         File::ensureDirectoryExists("{$this->directory}/posts/{$locale}");
@@ -111,7 +125,7 @@ class PostsContentTest extends TestCase
 
         return new Posts(
             $files,
-            new ContentCompiler($files, $this->app->make(MarkdownRenderer::class), "{$this->directory}/compiled"),
+            new ContentCompiler($files, $this->app->make(MarkdownRenderer::class), "{$this->directory}/compiled", ["{$this->directory}/view.blade.php"]),
             "{$this->directory}/posts",
             "{$this->directory}/compiled/posts.json",
         );

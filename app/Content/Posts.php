@@ -43,7 +43,7 @@ class Posts
         Post::query()->whereNotIn('key', $entries->pluck('key')->unique())->get()->each->delete();
 
         $this->files->ensureDirectoryExists(dirname($this->markerPath));
-        $this->files->replace($this->markerPath, json_encode($entries->all()));
+        $this->files->replace($this->markerPath, json_encode(['version' => $this->compiler->version(), 'entries' => $entries->all()]));
     }
 
     public function isStale(): bool
@@ -54,7 +54,7 @@ class Posts
 
         $entries = $this->entries();
 
-        if (json_decode($this->files->get($this->markerPath), true) !== $entries) {
+        if (json_decode($this->files->get($this->markerPath), true) !== ['version' => $this->compiler->version(), 'entries' => $entries]) {
             return true;
         }
 

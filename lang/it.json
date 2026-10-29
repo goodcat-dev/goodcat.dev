@@ -16,6 +16,7 @@
     "Guides": "Guide",
     "Issues": "Issue",
     "Language: :language": "Lingua: :language",
+    "Laravel articles by Matteo, with open source packages and their documentation. Focused on DX, architecture and the KISS principle.": "Articoli su Laravel di Matteo, con package open source e relativa documentazione. Focus su DX, architettura e principio KISS.",
     "Localized routes, translated URIs and domains, URL generation in any language.": "Route localizzate, URI e domini tradotti, generazione degli URL in ogni lingua.",
     "M j": "j M",
     "M j, Y": "j M Y",

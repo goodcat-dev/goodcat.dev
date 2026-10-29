@@ -1,6 +1,6 @@
-@props(['title' => null, 'active' => null, 'compactFooter' => false])
+@props(['title' => null, 'description' => null, 'active' => null, 'compactFooter' => false])
 
-<x-layouts.base :title="$title">
+<x-layouts.base :title="$title" :description="$description">
     <div class="min-h-screen overflow-hidden">
         <x-site.header :active="$active" />
 

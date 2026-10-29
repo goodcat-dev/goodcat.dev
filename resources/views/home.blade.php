@@ -7,7 +7,7 @@
     $dots = ['fill-mint', 'fill-cobalt', 'fill-tangerine', 'fill-grape'];
 @endphp
 
-<x-layouts.site>
+<x-layouts.site :description="__('Laravel articles by Matteo, with open source packages and their documentation. Focused on DX, architecture and the KISS principle.')">
     <section class="mx-auto max-w-7xl px-5 pt-16 pb-20 md:px-8 md:pt-24">
         <h1 class="flex flex-wrap items-center gap-x-5 gap-y-3 text-[48px] leading-[0.95] font-extrabold tracking-[-0.05em] md:text-[120px]">
             @foreach ($stickers as $word => $classes)

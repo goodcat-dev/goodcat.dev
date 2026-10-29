@@ -1,4 +1,4 @@
-@props(['title' => null])
+@props(['title' => null, 'description' => null])
 
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="motion-safe:scroll-smooth">
@@ -20,6 +20,9 @@
         </script>
 
         <title>{{ $title ? "{$title} · goodcat.dev" : 'goodcat.dev · Design, Code, Repeat.' }}</title>
+        @if ($description)
+            <meta name="description" content="{{ $description }}">
+        @endif
 
         <link rel="icon" href="/favicon.ico" sizes="48x48">
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">

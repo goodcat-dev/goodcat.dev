@@ -33,7 +33,8 @@ class LocalizationTest extends TestCase
             ->assertSee('I love designing solutions')
             ->assertSee('I follow the KISS philosophy')
             ->assertSee('Start reading')
-            ->assertSee('Oct 2, 2026');
+            ->assertSee('Oct 2, 2026')
+            ->assertSee('<meta name="description" content="Laravel articles by Matteo', false);
     }
 
     public function test_italian_home_renders_localized_prose_and_dates(): void
@@ -43,6 +44,7 @@ class LocalizationTest extends TestCase
             ->assertSee('Seguo la filosofia KISS')
             ->assertSee('Inizia a leggere')
             ->assertSee('2 ott 2026')
+            ->assertSee('<meta name="description" content="Articoli su Laravel di Matteo', false)
             ->assertSee('Route localizzate, URI e domini tradotti')
             ->assertDontSee('I follow the KISS philosophy');
     }

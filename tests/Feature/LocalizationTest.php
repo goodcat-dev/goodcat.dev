@@ -3,10 +3,13 @@
 namespace Tests\Feature;
 
 use App\Content\Docs;
+use Tests\SyncsPosts;
 use Tests\TestCase;
 
 class LocalizationTest extends TestCase
 {
+    use SyncsPosts;
+
     public function test_italian_pages_are_served_under_the_it_prefix(): void
     {
         $this->get('/it')

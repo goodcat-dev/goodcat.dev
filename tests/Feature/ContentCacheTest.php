@@ -4,13 +4,17 @@ namespace Tests\Feature;
 
 use App\Content\ContentCompiler;
 use App\Content\Markdown\MarkdownRenderer;
+use App\Models\Post;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
 use Tests\TestCase;
 
 class ContentCacheTest extends TestCase
 {
-    public function test_content_cache_compiles_every_markdown_file_and_the_posts_index(): void
+    use RefreshDatabase;
+
+    public function test_content_cache_compiles_every_markdown_file_and_syncs_the_posts(): void
     {
         $this->artisan('content:clear')->assertSuccessful();
 
@@ -20,7 +24,8 @@ class ContentCacheTest extends TestCase
             count(File::glob(base_path('content/docs/*/*/*/*.md'))) + count(File::glob(base_path('content/posts/*/*.md'))) + 1,
             File::files(storage_path('framework/content')),
         );
-        $this->assertFileExists(storage_path('framework/content/posts.php'));
+        $this->assertFileExists(storage_path('framework/content/posts.json'));
+        $this->assertSame(collect(File::glob(base_path('content/posts/*/*.md')))->map(fn (string $path) => basename($path))->unique()->count(), Post::query()->count());
     }
 
     public function test_content_cache_keeps_unchanged_compiled_files(): void
@@ -28,7 +33,7 @@ class ContentCacheTest extends TestCase
         $this->artisan('content:cache')->assertSuccessful();
 
         $compiled = collect(File::files(storage_path('framework/content')))
-            ->reject(fn ($file) => $file->getFilename() === 'posts.php')
+            ->reject(fn ($file) => $file->getFilename() === 'posts.json')
             ->map(fn ($file) => $file->getPathname());
         $marker = time() + 3600;
 
@@ -75,7 +80,7 @@ class ContentCacheTest extends TestCase
         $this->artisan('content:cache')->assertSuccessful();
 
         $this->assertFileDoesNotExist($orphan);
-        $this->assertFileExists(storage_path('framework/content/posts.php'));
+        $this->assertFileExists(storage_path('framework/content/posts.json'));
     }
 
     public function test_content_clear_removes_compiled_files(): void

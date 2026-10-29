@@ -12,7 +12,7 @@
                     <a href="{{ $package['url'] }}" class="inline-flex -rotate-2 items-center gap-2 rounded-2xl bg-pkg px-4 py-2 text-[15px] font-bold text-pkg-ink squircle hover:text-pkg-ink">{{ $package['name'] }}</a>
                 @endif
                 @foreach ($post->tags as $tag)
-                    <span class="rounded-full bg-ink-3 px-3 py-1.5 font-mono text-[13px] text-mist">{{ $tag }}</span>
+                    <span class="rounded-full bg-ink-3 px-3 py-1.5 font-mono text-[13px] text-mist">{{ $tag->name }}</span>
                 @endforeach
             </div>
 
@@ -32,9 +32,9 @@
                 </x-site.blob>
                 <span class="text-chalk">by Matteo</span>
                 <span aria-hidden="true">·</span>
-                <time datetime="{{ $post->publishedAt->toDateString() }}">{{ $post->publishedAt->format('M j, Y') }}</time>
+                <time datetime="{{ $post->published_at->toDateString() }}">{{ $post->published_at->format('M j, Y') }}</time>
                 <span aria-hidden="true">·</span>
-                <span>{{ $post->readingTime }} min read</span>
+                <span>{{ $post->reading_time }} min read</span>
             </div>
         </section>
 

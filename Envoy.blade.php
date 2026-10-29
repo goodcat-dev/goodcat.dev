@@ -8,6 +8,7 @@
     pull_repository
     run_composer
     run_node
+    migrate_database
     optimize_laravel
     purge_cdn
     search_index

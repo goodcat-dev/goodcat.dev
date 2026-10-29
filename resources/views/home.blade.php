@@ -46,7 +46,7 @@
         <div class="flex flex-col">
             @foreach ($posts as $post)
                 <x-site.post-row :post="$post" :dot="$dots[$loop->index % count($dots)]">
-                    {{ $post->publishedAt->format('M j, Y') }} · {{ $post->readingTime }} min
+                    {{ $post->published_at->format('M j, Y') }} · {{ $post->reading_time }} min
                 </x-site.post-row>
             @endforeach
         </div>

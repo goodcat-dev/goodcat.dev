@@ -10,7 +10,7 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
 #[Signature('content:cache')]
-#[Description('Compile changed Markdown content into highlighted HTML, rebuild the posts index and remove outdated files')]
+#[Description('Compile changed Markdown content into highlighted HTML, sync posts into the database and remove outdated files')]
 class ContentCache extends Command
 {
     public function handle(ContentCompiler $compiler, Docs $docs, Posts $posts): int
@@ -22,7 +22,7 @@ class ContentCache extends Command
             $compiler->get($path, $entry['locale']);
         }
 
-        $posts->buildIndex();
+        $posts->sync();
 
         foreach ($posts->entries() as $entry) {
             $paths[] = $posts->path($entry['key'], $entry['locale']);

@@ -2,44 +2,41 @@
 
 namespace Tests\Feature;
 
-use App\Content\Post;
+use App\Content\ContentCompiler;
+use App\Content\Markdown\MarkdownRenderer;
 use App\Content\Posts;
+use App\Models\Post;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\File;
 use Tests\TestCase;
 
 class PostsContentTest extends TestCase
 {
-    public function test_every_locale_has_the_same_posts(): void
-    {
-        $posts = app(Posts::class);
-        $keys = fn (string $locale) => $posts->all($locale)->map(fn (Post $post) => $post->key)->sort()->values()->all();
-        $reference = config('app.fallback_locale');
+    use RefreshDatabase;
 
-        foreach (array_keys(config('app.locales')) as $locale) {
-            $this->assertSame($keys($reference), $keys($locale), "Posts in {$locale} differ from {$reference}.");
-        }
+    private string $directory;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->directory = storage_path('framework/testing/posts-sync');
     }
 
-    public function test_translations_share_date_package_and_tags(): void
+    protected function tearDown(): void
     {
-        $posts = app(Posts::class);
+        File::deleteDirectory($this->directory);
 
-        foreach ($posts->all(config('app.fallback_locale')) as $post) {
-            foreach (array_keys(config('app.locales')) as $locale) {
-                $translation = $posts->find($post->key, $locale);
-
-                $this->assertTrue($post->publishedAt->equalTo($translation->publishedAt), "{$locale}/{$post->slug} has a different date.");
-                $this->assertSame($post->package, $translation->package, "{$locale}/{$post->slug} has a different package.");
-                $this->assertSame($post->tags, $translation->tags, "{$locale}/{$post->slug} has different tags.");
-            }
-        }
+        parent::tearDown();
     }
 
     public function test_slugs_are_unique_within_each_locale(): void
     {
-        $posts = app(Posts::class);
+        app(Posts::class)->sync();
 
         foreach (array_keys(config('app.locales')) as $locale) {
-            $slugs = $posts->all($locale)->map(fn (Post $post) => $post->slug);
+            $slugs = Post::query()->translatedIn($locale)->get()->map(fn (Post $post) => $post->getTranslation('slug', $locale, false));
 
             $this->assertSame($slugs->unique()->count(), $slugs->count(), "Duplicate slugs in {$locale}.");
             $this->assertTrue($slugs->every(fn (string $slug) => preg_match('/^[a-z0-9-]+$/', $slug) === 1), "Invalid slug in {$locale}.");
@@ -48,10 +45,75 @@ class PostsContentTest extends TestCase
 
     public function test_post_packages_exist(): void
     {
-        foreach (app(Posts::class)->all() as $post) {
-            if ($post->package !== null) {
-                $this->assertTrue(config()->has("packages.{$post->package}"), "{$post->slug} refers to an unknown package.");
-            }
+        app(Posts::class)->sync();
+
+        foreach (Post::query()->whereNotNull('package')->get() as $post) {
+            $this->assertTrue(config()->has("packages.{$post->package}"), "{$post->key} refers to an unknown package.");
         }
+    }
+
+    public function test_sync_stores_translations_and_tags_of_each_post(): void
+    {
+        $this->writePost('en', 'first-post', "title: 'First `post`'\npublished_at: 2026-01-10\npackage: laravel-l10n\ntags: [vue, ssr]");
+        $this->writePost('it', 'first-post', "title: 'Primo `articolo`'\nslug: primo-articolo\npublished_at: 2026-01-10");
+
+        $this->posts()->sync();
+
+        $post = Post::query()->sole();
+
+        $this->assertSame('first-post', $post->key);
+        $this->assertSame(['en' => 'first-post', 'it' => 'primo-articolo'], $post->getTranslations('slug'));
+        $this->assertSame('Primo articolo', $post->setLocale('it')->title);
+        $this->assertSame('laravel-l10n', $post->package);
+        $this->assertSame('2026-01-10', $post->published_at->toDateString());
+        $this->assertSame(['vue', 'ssr'], $post->tags->pluck('name')->all());
+    }
+
+    public function test_sync_mirrors_removed_files_and_translations(): void
+    {
+        $this->writePost('en', 'kept', "title: Kept\npublished_at: 2026-01-10");
+        $this->writePost('it', 'kept', "title: Tenuto\npublished_at: 2026-01-10");
+        $this->writePost('en', 'removed', "title: Removed\npublished_at: 2026-01-11");
+        $this->posts()->sync();
+
+        File::delete(["{$this->directory}/posts/it/kept.md", "{$this->directory}/posts/en/removed.md"]);
+        $this->posts()->sync();
+
+        $post = Post::query()->sole();
+
+        $this->assertSame('kept', $post->key);
+        $this->assertSame(['en'], $post->getTranslatedLocales('slug'));
+    }
+
+    public function test_posts_are_stale_until_synced_and_after_a_file_changes(): void
+    {
+        $this->writePost('en', 'first-post', "title: First\npublished_at: 2026-01-10");
+        $posts = $this->posts();
+
+        $this->assertTrue($posts->isStale());
+
+        $posts->sync();
+        $this->assertFalse($posts->isStale());
+
+        $this->writePost('it', 'first-post', "title: Primo\npublished_at: 2026-01-10");
+        $this->assertTrue($posts->isStale());
+    }
+
+    private function writePost(string $locale, string $key, string $frontMatter): void
+    {
+        File::ensureDirectoryExists("{$this->directory}/posts/{$locale}");
+        File::put("{$this->directory}/posts/{$locale}/{$key}.md", "---\n{$frontMatter}\n---\n\nBody.\n");
+    }
+
+    private function posts(): Posts
+    {
+        $files = new Filesystem;
+
+        return new Posts(
+            $files,
+            new ContentCompiler($files, $this->app->make(MarkdownRenderer::class), "{$this->directory}/compiled"),
+            "{$this->directory}/posts",
+            "{$this->directory}/compiled/posts.json",
+        );
     }
 }

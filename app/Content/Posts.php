@@ -2,6 +2,7 @@
 
 namespace App\Content;
 
+use App\Models\Post;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -10,90 +11,66 @@ class Posts
 {
     private const int WORDS_PER_MINUTE = 200;
 
-    /** @var array<string, Collection<int, Post>> */
-    private array $posts = [];
-
-    /** @var ?list<array{key: string, locale: string, slug: string, slugs: array<string, string>, headline: string, description: ?string, published_at: int, package: ?string, tags: list<string>, reading_time: int}> */
-    private ?array $index = null;
-
     public function __construct(
         private Filesystem $files,
         private ContentCompiler $compiler,
         private string $basePath,
-        private string $indexPath,
-        private bool $checksFreshness = true,
+        private string $markerPath,
     ) {}
 
-    /**
-     * @return Collection<int, Post>
-     */
-    public function all(string $locale = 'en'): Collection
+    public function sync(): void
     {
-        return $this->posts[$locale] ??= collect($this->index())
-            ->where('locale', $locale)
-            ->map(fn (array $entry) => new Post(
-                key: $entry['key'],
-                slug: $entry['slug'],
-                slugs: $entry['slugs'],
-                title: str_replace('`', '', $entry['headline']),
-                headline: $entry['headline'],
-                description: $entry['description'],
-                publishedAt: Carbon::createFromTimestamp($entry['published_at']),
-                package: $entry['package'],
-                tags: $entry['tags'],
-                readingTime: $entry['reading_time'],
-            ))
-            ->sortByDesc(fn (Post $post) => $post->publishedAt)
-            ->values();
-    }
+        $entries = collect($this->entries());
 
-    public function find(string $key, string $locale = 'en'): ?Post
-    {
-        return $this->all($locale)->first(fn (Post $post) => $post->key === $key);
-    }
+        $entries->groupBy('key')->each(function (Collection $translations, string $key) {
+            $attributes = $translations->mapWithKeys(fn (array $entry) => [$entry['locale'] => $this->attributes($entry['key'], $entry['locale'])]);
+            $reference = $attributes[config('app.fallback_locale')] ?? $attributes->first();
 
-    public function findBySlug(string $slug, string $locale = 'en'): ?Post
-    {
-        return $this->all($locale)->first(fn (Post $post) => $post->slug === $slug);
-    }
+            $post = Post::query()->firstOrNew(['key' => $key]);
 
-    public function html(Post $post, string $locale): string
-    {
-        return $this->compiler->get($this->path($post->key, $locale), $locale)['html'];
-    }
+            foreach ($post->getTranslatableAttributes() as $column) {
+                $post->replaceTranslations($column, $attributes->map(fn (array $translation) => $translation[$column])->filter(fn ($value) => $value !== null)->all());
+            }
 
-    /**
-     * @return list<array<string, mixed>>
-     */
-    public function buildIndex(): array
-    {
-        $entries = collect($this->entries())->map(function (array $entry) {
-            $compiled = $this->compiler->get($this->path($entry['key'], $entry['locale']), $entry['locale']);
-            $frontMatter = $compiled['front_matter'];
-            $publishedAt = $frontMatter['published_at'];
+            $post->fill([
+                'package' => $reference['package'],
+                'published_at' => $reference['published_at'],
+            ])->save();
 
-            return [
-                ...$entry,
-                'slug' => $frontMatter['slug'] ?? $entry['key'],
-                'headline' => $frontMatter['title'] ?? $entry['key'],
-                'description' => $frontMatter['description'] ?? null,
-                'published_at' => is_int($publishedAt) ? $publishedAt : Carbon::parse($publishedAt)->getTimestamp(),
-                'package' => $frontMatter['package'] ?? null,
-                'tags' => $frontMatter['tags'] ?? [],
-                'reading_time' => max(1, (int) ceil(str_word_count(strip_tags($compiled['html'])) / self::WORDS_PER_MINUTE)),
-            ];
+            $post->syncTags($reference['tags']);
         });
 
-        $slugs = $entries->groupBy('key')->map(fn (Collection $translations) => $translations->pluck('slug', 'locale')->all());
+        Post::query()->whereNotIn('key', $entries->pluck('key')->unique())->get()->each->delete();
 
-        $index = $entries->map(fn (array $entry) => [...$entry, 'slugs' => $slugs[$entry['key']]])->all();
+        $this->files->ensureDirectoryExists(dirname($this->markerPath));
+        $this->files->replace($this->markerPath, json_encode($entries->all()));
+    }
 
-        $this->files->ensureDirectoryExists(dirname($this->indexPath));
-        $this->files->replace($this->indexPath, '<?php return '.var_export($index, true).';'.PHP_EOL);
+    public function isStale(): bool
+    {
+        if (! $this->files->exists($this->markerPath)) {
+            return true;
+        }
 
-        $this->posts = [];
+        $entries = $this->entries();
 
-        return $this->index = $index;
+        if (json_decode($this->files->get($this->markerPath), true) !== $entries) {
+            return true;
+        }
+
+        if (Post::query()->count() !== collect($entries)->pluck('key')->unique()->count()) {
+            return true;
+        }
+
+        $syncedAt = $this->files->lastModified($this->markerPath);
+
+        foreach ($entries as $entry) {
+            if ($this->files->lastModified($this->path($entry['key'], $entry['locale'])) > $syncedAt) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -119,45 +96,23 @@ class Posts
     }
 
     /**
-     * @return list<array<string, mixed>>
+     * @return array{slug: string, headline: string, description: ?string, html: string, reading_time: int, package: ?string, published_at: Carbon, tags: list<string>}
      */
-    private function index(): array
+    private function attributes(string $key, string $locale): array
     {
-        if ($this->index !== null) {
-            return $this->index;
-        }
+        $compiled = $this->compiler->get($this->path($key, $locale), $locale);
+        $frontMatter = $compiled['front_matter'];
+        $publishedAt = $frontMatter['published_at'];
 
-        if (! $this->files->exists($this->indexPath)) {
-            return $this->buildIndex();
-        }
-
-        $index = $this->files->getRequire($this->indexPath);
-
-        if ($this->checksFreshness && $this->isStale($index)) {
-            return $this->buildIndex();
-        }
-
-        return $this->index = $index;
-    }
-
-    /**
-     * @param  list<array<string, mixed>>  $index
-     */
-    private function isStale(array $index): bool
-    {
-        $entries = $this->entries();
-        $builtAt = $this->files->lastModified($this->indexPath);
-
-        if (array_map(fn (array $entry) => [$entry['key'], $entry['locale']], $index) !== array_map(fn (array $entry) => [$entry['key'], $entry['locale']], $entries)) {
-            return true;
-        }
-
-        foreach ($entries as $entry) {
-            if ($this->files->lastModified($this->path($entry['key'], $entry['locale'])) > $builtAt) {
-                return true;
-            }
-        }
-
-        return false;
+        return [
+            'slug' => $frontMatter['slug'] ?? $key,
+            'headline' => $frontMatter['title'] ?? $key,
+            'description' => $frontMatter['description'] ?? null,
+            'html' => $compiled['html'],
+            'reading_time' => max(1, (int) ceil(str_word_count(strip_tags($compiled['html'])) / self::WORDS_PER_MINUTE)),
+            'package' => $frontMatter['package'] ?? null,
+            'published_at' => is_int($publishedAt) ? Carbon::createFromTimestamp($publishedAt) : Carbon::parse($publishedAt),
+            'tags' => $frontMatter['tags'] ?? [],
+        ];
     }
 }

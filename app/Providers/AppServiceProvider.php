@@ -6,6 +6,7 @@ use App\Content\ContentCompiler;
 use App\Content\Docs;
 use App\Content\Markdown\MarkdownRenderer;
 use App\Content\Posts;
+use App\Models\Post;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -43,8 +44,7 @@ class AppServiceProvider extends ServiceProvider
             $app->make(Filesystem::class),
             $app->make(ContentCompiler::class),
             base_path('content/posts'),
-            storage_path('framework/content/posts.php'),
-            ! $app->isProduction(),
+            storage_path('framework/content/posts.json'),
         ));
     }
 
@@ -53,8 +53,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Route::bind('post', fn (string $slug) => $this->app->make(Posts::class)->findBySlug($slug, $this->app->getLocale()) ?? abort(404));
+        Route::bind('post', fn (string $slug) => Post::query()->where('slug->'.$this->app->getLocale(), $slug)->firstOrFail());
 
         $this->optimizes(optimize: 'content:cache', clear: 'content:clear', key: 'content');
+
+        if (! $this->app->isProduction() && ! $this->app->runningInConsole()) {
+            $posts = $this->app->make(Posts::class);
+
+            if ($posts->isStale()) {
+                $posts->sync();
+            }
+        }
     }
 }

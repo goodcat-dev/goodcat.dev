@@ -2,42 +2,28 @@
 
 namespace Tests\Feature;
 
-use App\Content\ContentCompiler;
-use App\Content\Markdown\MarkdownRenderer;
-use App\Content\Posts;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\File;
+use App\Models\Post;
+use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class BlogArchiveTest extends TestCase
 {
-    private string $directory;
+    use RefreshDatabase;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->directory = storage_path('framework/testing/blog-archive');
-
-        foreach (['en', 'it'] as $locale) {
-            File::ensureDirectoryExists("{$this->directory}/posts/{$locale}");
-
-            foreach (range(1, 25) as $number) {
-                $date = now()->subDays($number)->toDateString();
-                $slug = $locale === 'en' ? "post-{$number}" : "articolo-{$number}";
-
-                File::put("{$this->directory}/posts/{$locale}/post-{$number}.md", "---\ntitle: 'Post {$number}'\nslug: {$slug}\npublished_at: {$date}\n---\n\nBody.\n");
-            }
-        }
-
-        $this->app->instance(Posts::class, $this->posts());
-    }
-
-    protected function tearDown(): void
-    {
-        File::deleteDirectory($this->directory);
-
-        parent::tearDown();
+        Post::factory()
+            ->count(25)
+            ->sequence(fn (Sequence $sequence) => [
+                'key' => 'post-'.($sequence->index + 1),
+                'slug' => ['en' => 'post-'.($sequence->index + 1), 'it' => 'articolo-'.($sequence->index + 1)],
+                'headline' => ['en' => 'Post '.($sequence->index + 1), 'it' => 'Articolo '.($sequence->index + 1)],
+                'published_at' => now()->subDays($sequence->index + 1),
+            ])
+            ->create();
     }
 
     public function test_archive_is_paginated_from_the_newest_post(): void
@@ -70,26 +56,11 @@ class BlogArchiveTest extends TestCase
             ->assertSee('Successiva');
     }
 
-    public function test_index_is_rebuilt_when_a_post_is_added(): void
+    public function test_posts_written_in_one_language_are_listed_only_in_that_language(): void
     {
-        $this->get(route('posts.index'))->assertSee('25 posts');
+        Post::factory()->onlyIn('it')->create(['headline' => ['it' => 'Solo in italiano'], 'published_at' => now()]);
 
-        File::put("{$this->directory}/posts/en/post-26.md", "---\ntitle: 'Post 26'\npublished_at: 2020-01-01\n---\n\nBody.\n");
-        File::put("{$this->directory}/posts/it/post-26.md", "---\ntitle: 'Post 26'\npublished_at: 2020-01-01\n---\n\nBody.\n");
-        $this->app->instance(Posts::class, $this->posts());
-
-        $this->get(route('posts.index'))->assertSee('26 posts');
-    }
-
-    private function posts(): Posts
-    {
-        $files = new Filesystem;
-
-        return new Posts(
-            $files,
-            new ContentCompiler($files, $this->app->make(MarkdownRenderer::class), "{$this->directory}/compiled"),
-            "{$this->directory}/posts",
-            "{$this->directory}/compiled/posts.php",
-        );
+        $this->get(route('posts.index'))->assertSee('25 posts')->assertDontSee('Solo in italiano');
+        $this->get('/it/blog')->assertSee('26 posts')->assertSee('Solo in italiano');
     }
 }

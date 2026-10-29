@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use Tests\SyncsPosts;
 use Tests\TestCase;
 
 class SitePagesTest extends TestCase
 {
+    use SyncsPosts;
+
     public function test_home_lists_packages_and_posts(): void
     {
         $this->get('/')

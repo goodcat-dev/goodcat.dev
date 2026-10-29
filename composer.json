@@ -11,6 +11,8 @@
         "laravel/framework": "^13.17",
         "laravel/tinker": "^3.0",
         "phiki/phiki": "^2.2",
+        "spatie/laravel-tags": "^4.12",
+        "spatie/laravel-translatable": "^6.15",
         "symfony/yaml": "^8.1"
     },
     "require-dev": {

@@ -6,10 +6,13 @@ use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Tests\SyncsPosts;
 use Tests\TestCase;
 
 class CdnCachingTest extends TestCase
 {
+    use SyncsPosts;
+
     /**
      * @return array<string, array{string}>
      */

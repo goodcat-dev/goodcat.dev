@@ -1,9 +1,9 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "goodcat/goodcat.dev",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "The source code of goodcat.dev: technical articles and the documentation of the goodcat packages.",
+    "keywords": ["laravel", "blog", "documentation"],
     "license": "MIT",
     "require": {
         "php": "^8.3",

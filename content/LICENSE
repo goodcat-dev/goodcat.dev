@@ -1,0 +1,27 @@
+Content License
+
+Copyright (c) 2026 Matteo Palazzo. All rights reserved.
+
+This license covers everything inside the content/ directory, including the
+articles in content/posts/ and the documentation in content/docs/. The MIT
+license in the root of this repository does not apply to these files.
+
+The content is published in this repository so that the website can be built
+and so that readers can suggest corrections. It is not released under an open
+license. Without prior written permission you may not reproduce, republish,
+translate, adapt or distribute it, in whole or in part, on any other website,
+publication or medium, nor use it to train machine learning models.
+
+You may read the content and view it on GitHub. You may quote short excerpts,
+with attribution and a link to the original page on https://goodcat.dev. You
+may copy the code snippets contained in the documentation and articles into
+your own projects, under the terms of the MIT license.
+
+Contributions
+
+By submitting a contribution to the files in content/ (for example through a
+pull request), you agree that Matteo Palazzo may use, modify and publish it as
+part of the content, under the terms of this license, without compensation or
+attribution requirements.
+
+For permission requests, contact matteo.palazzo@goodcat.dev.

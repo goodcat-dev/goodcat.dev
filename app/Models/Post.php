@@ -5,8 +5,6 @@ namespace App\Models;
 use Database\Factories\PostFactory;
 use Goodcat\L10n\Contracts\HasLocalizedRouteKey;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Scope;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -34,7 +32,7 @@ class Post extends Model implements HasLocalizedRouteKey
     public function previous(): ?self
     {
         return self::query()
-            ->translatedIn(app()->getLocale())
+            ->whereNotNull('slug->'.app()->getLocale())
             ->where('published_at', '<', $this->published_at)
             ->latest('published_at')
             ->first();
@@ -43,19 +41,10 @@ class Post extends Model implements HasLocalizedRouteKey
     public function next(): ?self
     {
         return self::query()
-            ->translatedIn(app()->getLocale())
+            ->whereNotNull('slug->'.app()->getLocale())
             ->where('published_at', '>', $this->published_at)
             ->oldest('published_at')
             ->first();
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     */
-    #[Scope]
-    protected function translatedIn(Builder $query, string $locale): void
-    {
-        $query->whereLocale('slug', $locale);
     }
 
     /**

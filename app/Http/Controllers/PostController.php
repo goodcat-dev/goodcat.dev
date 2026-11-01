@@ -13,7 +13,7 @@ class PostController extends Controller
     public function index(): View
     {
         $paginator = Post::query()
-            ->translatedIn(app()->getLocale())
+            ->whereNotNull('slug->'.app()->getLocale())
             ->latest('published_at')
             ->paginate(self::PER_PAGE);
 

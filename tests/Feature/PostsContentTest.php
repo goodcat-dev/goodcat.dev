@@ -36,7 +36,7 @@ class PostsContentTest extends TestCase
         app(Posts::class)->sync();
 
         foreach (array_keys(config('app.locales')) as $locale) {
-            $slugs = Post::query()->translatedIn($locale)->get()->map(fn (Post $post) => $post->getTranslation('slug', $locale, false));
+            $slugs = Post::query()->whereNotNull('slug->'.$locale)->get()->map(fn (Post $post) => $post->getTranslation('slug', $locale, false));
 
             $this->assertSame($slugs->unique()->count(), $slugs->count(), "Duplicate slugs in {$locale}.");
             $this->assertTrue($slugs->every(fn (string $slug) => preg_match('/^[a-z0-9-]+$/', $slug) === 1), "Invalid slug in {$locale}.");

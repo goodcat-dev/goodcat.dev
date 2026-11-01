@@ -15,7 +15,7 @@ class HomeController extends Controller
                 ...$package,
                 'url' => $docs->url($slug) ?? $package['repository'],
             ]),
-            'posts' => Post::query()->translatedIn(app()->getLocale())->latest('published_at')->take(4)->get(),
+            'posts' => Post::query()->whereNotNull('slug->'.app()->getLocale())->latest('published_at')->take(4)->get(),
         ]);
     }
 }

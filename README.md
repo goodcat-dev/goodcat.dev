@@ -1,5 +1,7 @@
 # goodcat.dev
 
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/goodcat-dev/goodcat.dev/test.yml?branch=main&label=tests&style=flat-square)](https://github.com/goodcat-dev/goodcat.dev/actions?query=workflow%3ATest+branch%3Amain)
+
 The source code of [goodcat.dev](https://goodcat.dev): technical articles and the documentation of the goodcat open source packages.
 
 ## License

@@ -15,7 +15,7 @@ class Algolia
 
     public function __construct(
         private string $appId,
-        private string $adminKey,
+        private string $writeKey,
         private string $index,
     ) {}
 
@@ -101,7 +101,7 @@ class Algolia
         return Http::baseUrl("https://{$this->appId}.algolia.net")
             ->withHeaders([
                 'X-Algolia-Application-Id' => $this->appId,
-                'X-Algolia-API-Key' => $this->adminKey,
+                'X-Algolia-API-Key' => $this->writeKey,
             ])
             ->acceptJson()
             ->timeout(30);

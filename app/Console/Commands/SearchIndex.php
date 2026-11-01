@@ -19,13 +19,13 @@ class SearchIndex extends Command
     {
         $config = config('services.algolia');
 
-        if (blank($config['app_id']) || blank($config['admin_key'])) {
-            $this->components->warn('Algolia is not configured: set ALGOLIA_APP_ID and ALGOLIA_ADMIN_KEY. Skipping.');
+        if (blank($config['app_id']) || blank($config['write_key'])) {
+            $this->components->warn('Algolia is not configured: set ALGOLIA_APP_ID and ALGOLIA_WRITE_KEY. Skipping.');
 
             return self::SUCCESS;
         }
 
-        $algolia = new Algolia($config['app_id'], $config['admin_key'], $config['index']);
+        $algolia = new Algolia($config['app_id'], $config['write_key'], $config['index']);
         $all = $records->all();
         $fingerprint = $algolia->fingerprint($all);
         $fingerprintPath = storage_path("framework/search/{$config['index']}.hash");

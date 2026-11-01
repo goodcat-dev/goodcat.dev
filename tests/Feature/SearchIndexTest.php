@@ -19,7 +19,7 @@ class SearchIndexTest extends TestCase
 
         config([
             'services.algolia.app_id' => 'APP',
-            'services.algolia.admin_key' => 'admin-key',
+            'services.algolia.write_key' => 'write-key',
             'services.algolia.search_key' => 'search-key',
             'services.algolia.index' => 'testing_content',
         ]);
@@ -59,7 +59,7 @@ class SearchIndexTest extends TestCase
 
         Http::assertSent(fn (Request $request) => $request->method() === 'POST'
             && str_ends_with($request->url(), '/1/indexes/testing_content_tmp/batch')
-            && $request->hasHeader('X-Algolia-API-Key', 'admin-key')
+            && $request->hasHeader('X-Algolia-API-Key', 'write-key')
             && collect($request['requests'])->contains('body.objectID', 'docs:laravel-l10n:0.x:en:quickstart#installation'));
 
         Http::assertSent(fn (Request $request) => str_ends_with($request->url(), '/1/indexes/testing_content_tmp/operation')
@@ -110,7 +110,7 @@ class SearchIndexTest extends TestCase
 
     public function test_search_index_is_skipped_without_credentials(): void
     {
-        config(['services.algolia.admin_key' => null]);
+        config(['services.algolia.write_key' => null]);
         Http::fake();
 
         $this->artisan('search:index')
@@ -125,7 +125,7 @@ class SearchIndexTest extends TestCase
         $this->get('/docs/laravel-l10n/0.x/quickstart')
             ->assertSee('Search the docs')
             ->assertSee('search-key')
-            ->assertDontSee('admin-key');
+            ->assertDontSee('write-key');
     }
 
     public function test_docs_search_is_shown_but_disabled_without_credentials(): void

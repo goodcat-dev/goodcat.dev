@@ -30,6 +30,7 @@
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
         <x-l10n::alternate />
+        <link rel="alternate" type="application/atom+xml" title="goodcat.dev" href="{{ route('posts.feed') }}">
 
         <script type="speculationrules">
             {

@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Content\Docs;
 use App\Models\Post;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class PostController extends Controller
 {
     private const int PER_PAGE = 20;
+
+    private const int FEED_SIZE = 20;
 
     public function index(): View
     {
@@ -23,6 +26,20 @@ class PostController extends Controller
             'paginator' => $paginator,
             'years' => $paginator->getCollection()->groupBy(fn (Post $post) => $post->published_at->year),
         ]);
+    }
+
+    public function feed(): Response
+    {
+        $posts = Post::query()
+            ->with('tags')
+            ->whereNotNull('slug->'.app()->getLocale())
+            ->latest('published_at')
+            ->take(self::FEED_SIZE)
+            ->get();
+
+        return response()
+            ->view('posts.feed', ['posts' => $posts])
+            ->header('Content-Type', 'application/atom+xml; charset=UTF-8');
     }
 
     public function show(Docs $docs, Post $post): View

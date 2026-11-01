@@ -19,6 +19,7 @@ Route::middleware(SetHttpCacheHeaders::class.':public;max_age=300;s_maxage=60480
             Route::get('/blog/{post}', [PostController::class, 'show'])
                 ->where('post', '[a-z0-9-]+')
                 ->name('posts.show');
+            Route::get('/feed', [PostController::class, 'feed'])->name('posts.feed');
 
             Route::get('/docs/{package}', [DocsController::class, 'index'])
                 ->where('package', '[a-z0-9-]+')

@@ -88,6 +88,18 @@ class SitePagesTest extends TestCase
             ->assertDontSee('<meta name="description"', false);
     }
 
+    public function test_privacy_page_is_english_only_and_linked_from_the_footer(): void
+    {
+        $this->get('/privacy')
+            ->assertOk()
+            ->assertSee('<html lang="en"', false)
+            ->assertDontSee('hreflang', false);
+
+        $this->get('/it/privacy')->assertNotFound();
+
+        $this->get('/it')->assertSee('href="'.route('privacy').'"', false);
+    }
+
     public function test_unknown_post_returns_not_found(): void
     {
         $this->get('/blog/missing-post')->assertNotFound();

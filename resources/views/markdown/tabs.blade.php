@@ -20,7 +20,11 @@
     </div>
 
     @foreach ($tabs as $tab)
-        <section id="panel-{{ $tab['id'] }}" role="tabpanel" aria-labelledby="tab-{{ $tab['id'] }}" x-show="isActive(@js($tab['id']))" @unless ($loop->first) x-cloak @endunless>
+        <section id="panel-{{ $tab['id'] }}" role="tabpanel" aria-labelledby="tab-{{ $tab['id'] }}" x-show="isActive(@js($tab['id']))"
+            x-transition:enter="motion-safe:transition motion-safe:duration-300 motion-safe:ease-[cubic-bezier(0.2,0.8,0.2,1)]"
+            x-transition:enter-start="motion-safe:translate-y-3 motion-safe:opacity-0"
+            @unless ($loop->first) x-cloak @endunless
+        >
             {!! $tab['html'] !!}
         </section>
     @endforeach
